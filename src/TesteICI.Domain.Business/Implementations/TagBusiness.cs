@@ -36,7 +36,7 @@ public class TagBusiness : ITagBusiness
         var tag = new Tag(request.TagId, request.Descricao);
         var result = await _tagService.Update(tag);
 
-        return new UpdateTagResponse(result.TagId);
+        return new UpdateTagResponse(result.TagId, request.Descricao);
     }
 
     public async Task<IEnumerable<TagResponse>> GetAllAsync()
