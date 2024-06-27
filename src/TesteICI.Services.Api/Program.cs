@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.RegisterDependencyInjection(builder.Configuration);
 
+builder.Services.AddAuthenticationConfig(builder.Configuration);
+
 builder.Services.AddApiConfig();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,7 +39,6 @@ builder.Services.AddSwaggerGen(options =>
 // Configure JSON logging to the console.
 builder.Logging.AddJsonConsole();
 
-builder.Services.AddAuthenticationConfig(builder.Configuration);
 // Configure routing to use lowercase URLs
 builder.Services.AddRouting(options =>
 {
@@ -62,8 +63,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseSecurityHeadersMiddleware(new SecurityHeadersBuilder().AddDefaultSecurePolicy());
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 

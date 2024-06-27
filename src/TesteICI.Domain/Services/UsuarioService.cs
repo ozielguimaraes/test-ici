@@ -55,7 +55,7 @@ namespace TesteICI.Domain.Services
             return await _usuarioRepository.HasAnyAsync(predicate, cancellationToken);
         }
 
-        public async Task<IQueryable<Usuario>> Filter(Expression<Func<Usuario, bool>> predicate)
+        public async Task<IQueryable<Usuario>> Filter(Expression<Func<Usuario, bool>> predicate, CancellationToken cancellationToken)
         {
             return _usuarioRepository.Filter(predicate);
         }

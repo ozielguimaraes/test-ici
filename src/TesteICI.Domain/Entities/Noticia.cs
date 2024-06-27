@@ -1,3 +1,4 @@
+
 namespace TesteICI.Domain.Entities;
 
 public class Noticia
@@ -20,4 +21,11 @@ public class Noticia
     public string Titulo { get; private set; } = string.Empty;
     public string Texto { get; private set; } = string.Empty;
     public long UsuarioId { get; private set; }
+
+    internal void Update(Noticia noticiaUpdated)
+    {
+        Titulo = noticiaUpdated.Titulo;
+        Texto = noticiaUpdated.Texto;
+        UsuarioId = noticiaUpdated.UsuarioId;
+    }
 }

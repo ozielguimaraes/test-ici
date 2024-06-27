@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace TesteICI.Infra.CrossCutting.Security;
 
@@ -16,6 +16,16 @@ public sealed class SecurityService : ISecurityService
         ArgumentNullException.ThrowIfNull(email);
 
         var usuario = await _userManager.FindByEmailAsync(email);
+        ArgumentNullException.ThrowIfNull(usuario);
+
+        return usuario;
+    }
+
+    public async Task<IdentityUser?> ObterPorIdAsync(string userId)
+    {
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var usuario = await _userManager.FindByIdAsync(userId);
         ArgumentNullException.ThrowIfNull(usuario);
 
         return usuario;

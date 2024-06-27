@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -94,7 +95,7 @@ public class AuthController : BaseController
         }
         catch (Exception ex)
         {
-            var message = "Error to signup";
+            var message = "Error to signin";
             return InternalServerError(ex, message);
         }
     }
@@ -143,25 +144,30 @@ public class AuthController : BaseController
         identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.UniqueName, usuario.UserName!));
         identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
-        var handler = new JwtSecurityTokenHandler();
-        var key = await _jwtService.GetCurrentSigningCredentials();
-        //var secret = _configuration.GetSection("JwtSetting::Secret").Value;
-        //var key = Encoding.UTF8.GetBytes(secret!);
-        var currentIssuer = $"{ControllerContext.HttpContext.Request.Scheme}://{ControllerContext.HttpContext.Request.Host}";
+        return BuildToken(identityClaims);
+    }
 
-        var expiresInSeconds = _configuration.GetSection("JwtSetting::ExpirationInSeconds").Value ?? "3600";
-        var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+    private string BuildToken(ClaimsIdentity identityClaims)
+    {
+        var settings = _configuration.GetSection("AppJwtSettings");
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var secret = settings["SecretKey"];
+        ArgumentNullException.ThrowIfNull(secret);
+
+        var key = Encoding.ASCII.GetBytes(secret);
+        var issuer = settings["Issuer"];
+        var audience = settings["Audience"];
+
+        var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
         {
-            Issuer = currentIssuer,
-            SigningCredentials = key,
+            Issuer = issuer,
+            Audience = audience,
             Subject = identityClaims,
-            NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddSeconds(double.Parse(expiresInSeconds)),
-            IssuedAt = DateTime.UtcNow,
-            TokenType = "at+jwt"
+            Expires = DateTime.UtcNow.AddHours(double.Parse(settings["ExpirationInSeconds"] ?? "3600")),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha512Signature)
         });
 
-        var encodedJwt = handler.WriteToken(securityToken);
-        return encodedJwt;
+        return tokenHandler.WriteToken(token);
     }
 }
