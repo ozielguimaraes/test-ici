@@ -1,8 +1,8 @@
 namespace TesteICI.Domain.Business.Responses.Usuario;
 
-public class UpdateUsuarioResponse : BaseResponse
+public class EditarUsuarioResponse : BaseResponse
 {
-    public UpdateUsuarioResponse(long usuarioId)
+    public EditarUsuarioResponse(long usuarioId)
     {
         UsuarioId = usuarioId;
     }

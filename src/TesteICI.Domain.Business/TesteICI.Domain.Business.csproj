@@ -16,9 +16,4 @@
     <ProjectReference Include="..\TesteICI.Infra.CrossCutting.Security\TesteICI.Infra.CrossCutting.Security.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validations\Noticia\" />
-    <Folder Include="Validations\Usuario\" />
-  </ItemGroup>
-
 </Project>

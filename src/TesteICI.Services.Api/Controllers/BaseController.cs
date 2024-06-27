@@ -64,13 +64,13 @@ public abstract class BaseController : ControllerBase
         return BadRequest(result.Errors);
     }
 
-    protected IActionResult ResultWhenSignIn(SigninRequest request)
+    protected IActionResult ResultWhenSignIn(EfetuarLoginRequest request)
     {
         Logger.LogInformation($"Usuário ou senha inválida {request.Login}");
         return BadRequest("Usuário ou senha inválida");
     }
 
-    protected IActionResult ResultWhenSignIn(Microsoft.AspNetCore.Identity.SignInResult result, SigninRequest request)
+    protected IActionResult ResultWhenSignIn(Microsoft.AspNetCore.Identity.SignInResult result, EfetuarLoginRequest request)
     {
         if (result.Succeeded)
         {

@@ -1,8 +1,8 @@
-﻿using TesteICI.Domain.Business.Responses.Noticia;
-using TesteICI.Domain.Business.Requests.Noticia;
-using TesteICI.Domain.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using TesteICI.Domain.Business.Interfaces;
+using TesteICI.Domain.Business.Requests.Noticia;
+using TesteICI.Domain.Business.Responses.Noticia;
 
 namespace TesteICI.Services.Api.Controllers
 {
@@ -13,8 +13,8 @@ namespace TesteICI.Services.Api.Controllers
         private readonly INoticiaBusiness _noticiaBusiness;
 
         public NoticiaController(
-            ILogger<NoticiaController> logger, 
-            IHttpContextAccessor httpContextAccessor, 
+            ILogger<NoticiaController> logger,
+            IHttpContextAccessor httpContextAccessor,
             INoticiaBusiness noticiaBusiness
             ) : base(logger)
         {
@@ -47,7 +47,7 @@ namespace TesteICI.Services.Api.Controllers
         [ProducesResponseType(typeof(NoticiaResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] CreateNoticiaRequest request)
+        public async Task<IActionResult> Create([FromBody] AdicionarNoticiaRequest request)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace TesteICI.Services.Api.Controllers
         [ProducesResponseType(typeof(NoticiaResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update([FromBody] UpdateNoticiaRequest request)
+        public async Task<IActionResult> Update([FromBody] EditarNoticiaRequest request)
         {
             try
             {

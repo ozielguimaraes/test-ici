@@ -5,6 +5,6 @@ namespace TesteICI.Domain.Business.Interfaces;
 
 public interface IAuthBusiness
 {
-    Task<SignupResponse> Validate(SignupRequest request, CancellationToken cancellationToken);
-    Task<SigninResponse> Validate(SigninRequest request, CancellationToken cancellationToken);
+    Task<SeCadastrarResponse> Validate(SeCadastrarRequest request, CancellationToken cancellationToken);
+    Task<EfetuarLoginResponse> Validate(EfetuarLoginRequest request, CancellationToken cancellationToken);
 }

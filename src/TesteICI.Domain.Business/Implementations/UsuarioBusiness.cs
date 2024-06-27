@@ -15,7 +15,7 @@ public class UsuarioBusiness : IUsuarioBusiness
         _usuarioService = usuarioService;
     }
 
-    public async Task<CreateUsuarioResponse> Create(CreateUsuarioRequest request)
+    public async Task<AdicionarUsuarioResponse> Create(AdicionarUsuarioRequest request)
     {
         //TODO Validar com fluent validation
 
@@ -30,10 +30,10 @@ public class UsuarioBusiness : IUsuarioBusiness
 
         var result = await _usuarioService.Add(usuario);
 
-        return new CreateUsuarioResponse(result.UsuarioId);
+        return new AdicionarUsuarioResponse(result.UsuarioId);
     }
 
-    public async Task<UpdateUsuarioResponse> Update(UpdateUsuarioRequest request)
+    public async Task<EditarUsuarioResponse> Update(EditarUsuarioRequest request)
     {
         //TODO Validar, usando FluentValidations
         if (string.IsNullOrWhiteSpace(request.Nome))
@@ -46,7 +46,7 @@ public class UsuarioBusiness : IUsuarioBusiness
         var usuario = new Usuario();
         var result = await _usuarioService.Update(usuario);
 
-        return new UpdateUsuarioResponse(result.UsuarioId);
+        return new EditarUsuarioResponse(result.UsuarioId);
     }
 
     public async Task<List<UsuarioResponse>> GetAll()

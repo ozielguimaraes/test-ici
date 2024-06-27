@@ -6,8 +6,8 @@ namespace TesteICI.Domain.Business.Interfaces
 {
     public interface INoticiaBusiness
     {
-        Task<CreateNoticiaResponse> Create(CreateNoticiaRequest request);
-        Task<UpdateNoticiaResponse> Update(UpdateNoticiaRequest request);
+        Task<AdicionarNoticiaResponse> Create(AdicionarNoticiaRequest request);
+        Task<EditarNoticiaResponse> Update(EditarNoticiaRequest request);
         Task<NoticiaResponse> GetById(long noticiaId);
     }
 }

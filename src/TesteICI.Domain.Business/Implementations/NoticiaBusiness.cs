@@ -15,7 +15,7 @@ namespace TesteICI.Domain.Business.Implementations
             _noticiaService = noticiaService;
         }
 
-        public async Task<CreateNoticiaResponse> Create(CreateNoticiaRequest request)
+        public async Task<AdicionarNoticiaResponse> Create(AdicionarNoticiaRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
@@ -31,10 +31,10 @@ namespace TesteICI.Domain.Business.Implementations
 
             var result = await _noticiaService.Add(noticia);
 
-            return new CreateNoticiaResponse(result.NoticiaId);
+            return new AdicionarNoticiaResponse(result.NoticiaId);
         }
 
-        public async Task<UpdateNoticiaResponse> Update(UpdateNoticiaRequest request)
+        public async Task<EditarNoticiaResponse> Update(EditarNoticiaRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
@@ -48,7 +48,7 @@ namespace TesteICI.Domain.Business.Implementations
 
             var noticia = new Noticia(request.NoticiaId, request.Titulo, request.Texto, request.UsuarioId);
             var result = await _noticiaService.Update(noticia);
-            return new UpdateNoticiaResponse(result.NoticiaId);
+            return new EditarNoticiaResponse(result.NoticiaId);
         }
 
         public async Task<List<NoticiaResponse>> GetAll()

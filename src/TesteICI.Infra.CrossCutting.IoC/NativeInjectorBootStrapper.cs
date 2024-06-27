@@ -53,10 +53,10 @@ public static class NativeInjectorBootStrapper
         // Registrar FluentValidation
         //services.AddValidatorsFromAssemblyContaining<SignupRequestValidator>();
 
-        services.AddScoped<IValidator<SigninRequest>, SigninRequestValidator>();
-        services.AddScoped<IValidator<SignupRequest>, SignupRequestValidator>();
-        services.AddScoped<IValidator<UpdateTagRequest>, UpdateTagRequestValidator>();
-        services.AddScoped<IValidator<CreateTagRequest>, CreateTagRequestValidator>();
+        services.AddScoped<IValidator<EfetuarLoginRequest>, EfetuarLoginRequestValidator>();
+        services.AddScoped<IValidator<SeCadastrarRequest>, SeCadastrarRequestValidator>();
+        services.AddScoped<IValidator<EditarTagRequest>, EditarTagRequestValidator>();
+        services.AddScoped<IValidator<AdicionarTagRequest>, AdicionarTagRequestValidator>();
 
         //services.AddValidatorsFromAssemblyContaining<SigninRequestValidator>();
 

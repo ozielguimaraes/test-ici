@@ -2,11 +2,11 @@ using FluentValidation.Results;
 
 namespace TesteICI.Domain.Business.Responses.Tag
 {
-    public class UpdateTagResponse : BaseResponse
+    public class EditarTagResponse : BaseResponse
     {
-        public UpdateTagResponse(ValidationResult validationResult) : base(validationResult) { }
+        public EditarTagResponse(ValidationResult validationResult) : base(validationResult) { }
 
-        public UpdateTagResponse(long tagId, string descricao)
+        public EditarTagResponse(long tagId, string descricao)
         {
             TagId = tagId;
             Descricao = descricao;

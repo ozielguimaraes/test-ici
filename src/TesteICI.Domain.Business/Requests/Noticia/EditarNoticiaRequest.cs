@@ -1,6 +1,6 @@
 namespace TesteICI.Domain.Business.Requests.Noticia;
 
-public sealed class UpdateNoticiaRequest
+public sealed class EditarNoticiaRequest
 {
     public long NoticiaId { get; set; }
     public string Titulo { get; set; } = string.Empty;

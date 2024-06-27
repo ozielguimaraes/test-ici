@@ -1,6 +1,6 @@
 namespace TesteICI.Domain.Business.Requests.Usuario;
 
-public class CreateUsuarioRequest
+public class AdicionarUsuarioRequest
 {
     public string Nome { get; set; }
     public string Email { get; set; }

@@ -5,11 +5,11 @@ using TesteICI.Domain.Business.Requests.Auth;
 using TesteICI.Domain.Interfaces.Services;
 
 namespace TesteICI.Domain.Business.Validations.Auth;
-public sealed class SignupRequestValidator : AbstractValidator<SignupRequest>
+public sealed class SeCadastrarRequestValidator : AbstractValidator<SeCadastrarRequest>
 {
     private readonly IUsuarioService _usuarioService;
 
-    public SignupRequestValidator(IUsuarioService usuarioService, IOptions<IdentityOptions> identityOptions)
+    public SeCadastrarRequestValidator(IUsuarioService usuarioService, IOptions<IdentityOptions> identityOptions)
     {
         var passwordOptions = identityOptions.Value.Password;
         _usuarioService = usuarioService;

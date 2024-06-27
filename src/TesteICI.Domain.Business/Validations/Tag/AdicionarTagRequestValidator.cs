@@ -1,11 +1,11 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TesteICI.Domain.Business.Requests.Tag;
 
 namespace TesteICI.Domain.Business.Validations.Tag;
 
-public sealed class CreateTagRequestValidator : AbstractValidator<CreateTagRequest>
+public sealed class AdicionarTagRequestValidator : AbstractValidator<AdicionarTagRequest>
 {
-    public CreateTagRequestValidator()
+    public AdicionarTagRequestValidator()
     {
         RuleFor(x => x.Descricao)
             .NotEmpty().WithMessage("A descrição é obrigatória.")

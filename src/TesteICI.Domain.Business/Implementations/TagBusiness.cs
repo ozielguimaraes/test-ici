@@ -10,42 +10,42 @@ namespace TesteICI.Domain.Business.Implementations;
 public class TagBusiness : ITagBusiness
 {
     private readonly ITagService _tagService;
-    private readonly IValidator<CreateTagRequest> _adicionarTagValidator;
-    private readonly IValidator<UpdateTagRequest> _editarTagValidator;
+    private readonly IValidator<AdicionarTagRequest> _adicionarTagValidator;
+    private readonly IValidator<EditarTagRequest> _editarTagValidator;
 
-    public TagBusiness(ITagService tagService, IValidator<UpdateTagRequest> editarTagValidator, IValidator<CreateTagRequest> adicionarTagValidator)
+    public TagBusiness(ITagService tagService, IValidator<EditarTagRequest> editarTagValidator, IValidator<AdicionarTagRequest> adicionarTagValidator)
     {
         _tagService = tagService;
         _editarTagValidator = editarTagValidator;
         _adicionarTagValidator = adicionarTagValidator;
     }
 
-    public async Task<CreateTagResponse> Create(CreateTagRequest request)
+    public async Task<AdicionarTagResponse> Create(AdicionarTagRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
         var resultadoValidacao = await _adicionarTagValidator.ValidateAsync(request);
         if (!resultadoValidacao.IsValid)
-            return new CreateTagResponse(resultadoValidacao);
+            return new AdicionarTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.Descricao);
         var result = await _tagService.Add(tag);
 
-        return new CreateTagResponse(result.TagId);
+        return new AdicionarTagResponse(result.TagId);
     }
 
-    public async Task<UpdateTagResponse> Update(UpdateTagRequest request)
+    public async Task<EditarTagResponse> Update(EditarTagRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
         var resultadoValidacao = await _editarTagValidator.ValidateAsync(request);
         if (!resultadoValidacao.IsValid)
-            return new UpdateTagResponse(resultadoValidacao);
+            return new EditarTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.TagId, request.Descricao);
         var result = await _tagService.Update(tag);
 
-        return new UpdateTagResponse(result.TagId, request.Descricao);
+        return new EditarTagResponse(result.TagId, request.Descricao);
     }
 
     public async Task<IEnumerable<TagResponse>> GetAllAsync()

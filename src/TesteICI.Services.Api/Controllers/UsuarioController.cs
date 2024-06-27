@@ -30,10 +30,10 @@ public class UsuarioController : BaseController
     [AllowAnonymous]
     [HttpPost]
     [Route("signup")]
-    [ProducesResponseType(typeof(CreateUsuarioResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(AdicionarUsuarioResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Signup(CreateUsuarioRequest request)
+    public async Task<IActionResult> Signup(AdicionarUsuarioRequest request)
     {
         try
         {

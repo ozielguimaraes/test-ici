@@ -2,11 +2,11 @@ using FluentValidation.Results;
 
 namespace TesteICI.Domain.Business.Responses.Auth;
 
-public class SigninResponse : BaseResponse
+public class EfetuarLoginResponse : BaseResponse
 {
-    public SigninResponse(ValidationResult validationResult) : base(validationResult) { }
+    public EfetuarLoginResponse(ValidationResult validationResult) : base(validationResult) { }
 
-    public SigninResponse(string token, string nome, DateTime expiracaoEmUtc)
+    public EfetuarLoginResponse(string token, string nome, DateTime expiracaoEmUtc)
     {
         Token = token;
         Nome = nome;

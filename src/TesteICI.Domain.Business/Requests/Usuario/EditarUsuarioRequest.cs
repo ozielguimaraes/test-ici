@@ -1,6 +1,6 @@
 namespace TesteICI.Domain.Business.Requests.Usuario;
 
-public class UpdateUsuarioRequest
+public class EditarUsuarioRequest
 {
     public long UsuarioId { get; set; }
     public string Nome { get; private set; }

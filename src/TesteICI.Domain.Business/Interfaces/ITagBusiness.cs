@@ -7,7 +7,7 @@ namespace TesteICI.Domain.Business.Interfaces
     {
         Task<TagResponse> GetById(long tagId);
         Task<IEnumerable<TagResponse>> GetAllAsync();
-        Task<CreateTagResponse> Create(CreateTagRequest request);
-        Task<UpdateTagResponse> Update(UpdateTagRequest request);
+        Task<AdicionarTagResponse> Create(AdicionarTagRequest request);
+        Task<EditarTagResponse> Update(EditarTagRequest request);
     }
 }

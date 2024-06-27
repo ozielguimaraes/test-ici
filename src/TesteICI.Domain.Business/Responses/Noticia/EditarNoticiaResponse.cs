@@ -1,8 +1,8 @@
 ﻿namespace TesteICI.Domain.Business.Responses.Noticia
 {
-    public class UpdateNoticiaResponse : BaseResponse
+    public class EditarNoticiaResponse : BaseResponse
     {
-        public UpdateNoticiaResponse(long noticiaId)
+        public EditarNoticiaResponse(long noticiaId)
         {
             NoticiaId = noticiaId;
         }

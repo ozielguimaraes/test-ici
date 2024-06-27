@@ -1,8 +1,8 @@
 ﻿namespace TesteICI.Domain.Business.Responses.Usuario
 {
-    public class CreateUsuarioResponse : BaseResponse
+    public class AdicionarUsuarioResponse : BaseResponse
     {
-        public CreateUsuarioResponse(long usuarioId)
+        public AdicionarUsuarioResponse(long usuarioId)
         {
             UsuarioId = usuarioId;
         }

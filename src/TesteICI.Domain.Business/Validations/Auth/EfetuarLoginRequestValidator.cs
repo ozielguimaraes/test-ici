@@ -3,9 +3,9 @@ using TesteICI.Domain.Business.Requests.Auth;
 
 namespace TesteICI.Domain.Business.Validations.Auth;
 
-public sealed class SigninRequestValidator : AbstractValidator<SigninRequest>
+public sealed class EfetuarLoginRequestValidator : AbstractValidator<EfetuarLoginRequest>
 {
-    public SigninRequestValidator()
+    public EfetuarLoginRequestValidator()
     {
         RuleFor(x => x.Login)
             .NotEmpty().WithMessage("O login é obrigatório.")

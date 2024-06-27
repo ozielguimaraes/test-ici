@@ -66,7 +66,7 @@ public class TagController : BaseController
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] CreateTagRequest request)
+    public async Task<IActionResult> Create([FromBody] AdicionarTagRequest request)
     {
         try
         {
@@ -86,7 +86,7 @@ public class TagController : BaseController
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update([FromBody] UpdateTagRequest request)
+    public async Task<IActionResult> Update([FromBody] EditarTagRequest request)
     {
         try
         {

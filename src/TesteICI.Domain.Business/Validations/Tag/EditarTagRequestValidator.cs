@@ -3,9 +3,9 @@ using TesteICI.Domain.Business.Requests.Tag;
 
 namespace TesteICI.Domain.Business.Validations.Tag;
 
-public sealed class UpdateTagRequestValidator : AbstractValidator<UpdateTagRequest>
+public sealed class EditarTagRequestValidator : AbstractValidator<EditarTagRequest>
 {
-    public UpdateTagRequestValidator()
+    public EditarTagRequestValidator()
     {
         RuleFor(x => x.TagId)
             .NotEmpty().WithMessage("A id é obrigatório.");

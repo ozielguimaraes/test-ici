@@ -34,10 +34,10 @@ public class AuthController : BaseController
     [AllowAnonymous]
     [HttpPost]
     [Route("signup")]
-    [ProducesResponseType(typeof(SignupResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(SeCadastrarResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Signup(SignupRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Signup(SeCadastrarRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -73,10 +73,10 @@ public class AuthController : BaseController
     [AllowAnonymous]
     [HttpPost]
     [Route("signin")]
-    [ProducesResponseType(typeof(SigninResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(EfetuarLoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Signin(SigninRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Signin(EfetuarLoginRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -100,7 +100,7 @@ public class AuthController : BaseController
         }
     }
 
-    private async Task<IActionResult> ResultWhenSignIn(Microsoft.AspNetCore.Identity.SignInResult result, SigninRequest request, SigninResponse response)
+    private async Task<IActionResult> ResultWhenSignIn(Microsoft.AspNetCore.Identity.SignInResult result, EfetuarLoginRequest request, EfetuarLoginResponse response)
     {
         if (result.Succeeded)
         {
