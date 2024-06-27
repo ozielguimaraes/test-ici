@@ -5,7 +5,7 @@ using TesteICI.Domain.Business.Requests.Auth;
 using TesteICI.Domain.Interfaces.Services;
 
 namespace TesteICI.Domain.Business.Validations.Auth;
-public class SignupRequestValidator : AbstractValidator<SignupRequest>
+public sealed class SignupRequestValidator : AbstractValidator<SignupRequest>
 {
     private readonly IUsuarioService _usuarioService;
 

@@ -1,3 +1,4 @@
+using FluentValidation;
 using TesteICI.Domain.Business.Interfaces;
 using TesteICI.Domain.Business.Requests.Tag;
 using TesteICI.Domain.Business.Responses.Tag;
@@ -9,21 +10,25 @@ namespace TesteICI.Domain.Business.Implementations;
 public class TagBusiness : ITagBusiness
 {
     private readonly ITagService _tagService;
+    private readonly IValidator<CreateTagRequest> _adicionarTagValidator;
+    private readonly IValidator<UpdateTagRequest> _editarTagValidator;
 
-    public TagBusiness(ITagService tagService)
+    public TagBusiness(ITagService tagService, IValidator<UpdateTagRequest> editarTagValidator, IValidator<CreateTagRequest> adicionarTagValidator)
     {
         _tagService = tagService;
+        _editarTagValidator = editarTagValidator;
+        _adicionarTagValidator = adicionarTagValidator;
     }
 
     public async Task<CreateTagResponse> Create(CreateTagRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        if (request.Descricao is null)
-            throw new ArgumentNullException(nameof(request.Descricao));
+        var resultadoValidacao = await _adicionarTagValidator.ValidateAsync(request);
+        if (!resultadoValidacao.IsValid)
+            return new CreateTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.Descricao);
-
         var result = await _tagService.Add(tag);
 
         return new CreateTagResponse(result.TagId);
@@ -32,6 +37,10 @@ public class TagBusiness : ITagBusiness
     public async Task<UpdateTagResponse> Update(UpdateTagRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
+
+        var resultadoValidacao = await _editarTagValidator.ValidateAsync(request);
+        if (!resultadoValidacao.IsValid)
+            return new UpdateTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.TagId, request.Descricao);
         var result = await _tagService.Update(tag);
