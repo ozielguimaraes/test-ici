@@ -11,8 +11,8 @@ using TesteICI.Infra.Data.Context;
 namespace TesteICI.Infra.Data.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20240626000822_inicial")]
-    partial class inicial
+    [Migration("20240627133320_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,11 +35,11 @@ namespace TesteICI.Infra.Data.Migrations
 
                     b.Property<string>("Texto")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(max)");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<long>("UsuarioId")
                         .HasColumnType("bigint");
@@ -58,11 +58,17 @@ namespace TesteICI.Infra.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("NoticiaTagId"));
 
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("NoticiaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TagId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("NoticiaTagId");
+
+                    b.HasIndex("NoticiaId");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("NoticiaTags");
                 });
@@ -78,7 +84,7 @@ namespace TesteICI.Infra.Data.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("TagId");
 
@@ -89,8 +95,7 @@ namespace TesteICI.Infra.Data.Migrations
                 {
                     b.Property<long>("UsuarioId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("Id");
+                        .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UsuarioId"));
 
@@ -109,6 +114,35 @@ namespace TesteICI.Infra.Data.Migrations
                     b.HasKey("UsuarioId");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("TesteICI.Domain.Entities.NoticiaTag", b =>
+                {
+                    b.HasOne("TesteICI.Domain.Entities.Noticia", "Noticia")
+                        .WithMany("Tags")
+                        .HasForeignKey("NoticiaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TesteICI.Domain.Entities.Tag", "Tag")
+                        .WithMany("Tags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Noticia");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("TesteICI.Domain.Entities.Noticia", b =>
+                {
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("TesteICI.Domain.Entities.Tag", b =>
+                {
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

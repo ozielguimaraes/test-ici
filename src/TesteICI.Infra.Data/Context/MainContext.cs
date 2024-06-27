@@ -1,7 +1,7 @@
-﻿using TesteICI.Domain.Entities;
-using TesteICI.Infra.Data.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using TesteICI.Domain.Entities;
+using TesteICI.Infra.Data.Mappings;
 
 namespace TesteICI.Infra.Data.Context
 {
@@ -18,14 +18,13 @@ namespace TesteICI.Infra.Data.Context
         public DbSet<Noticia> Noticias { get; set; }
         public DbSet<NoticiaTag> NoticiaTags { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new TagMap());
-             modelBuilder.ApplyConfiguration(new NoticiaMap());
-             modelBuilder.ApplyConfiguration(new NoticiaTagMap());
-             modelBuilder.ApplyConfiguration(new UsuarioMap());
-             
+            modelBuilder.ApplyConfiguration(new NoticiaMap());
+            modelBuilder.ApplyConfiguration(new NoticiaTagMap());
+
             base.OnModelCreating(modelBuilder);
         }
 
