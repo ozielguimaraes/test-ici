@@ -1,7 +1,11 @@
-﻿namespace TesteICI.Domain.Business.Responses.Noticia
+using FluentValidation.Results;
+
+namespace TesteICI.Domain.Business.Responses.Noticia
 {
     public class AdicionarNoticiaResponse : BaseResponse
     {
+        public AdicionarNoticiaResponse(ValidationResult validationResult) : base(validationResult) { }
+
         public AdicionarNoticiaResponse(long noticiaId)
         {
             NoticiaId = noticiaId;

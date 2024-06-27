@@ -15,7 +15,7 @@ public class TagService : BaseService, ITagService
         _tagRepository = tagRepository;
     }
 
-    public async Task<Tag> Add(Tag tag)
+    public async Task<Tag> Adicionar(Tag tag)
     {
         BeginTransaction();
         tag = _tagRepository.Add(tag);
@@ -23,31 +23,35 @@ public class TagService : BaseService, ITagService
         return tag;
     }
 
-    public async Task<Tag> Update(Tag tagUpdated)
+    public async Task<Tag?> Editar(Tag tagUpdated)
     {
         BeginTransaction();
-        var tag = await GetById(tagUpdated.TagId);
+        var tag = await ObterPorId(tagUpdated.TagId);
+
+        if (tag is null)
+            return null;
+
         tag.Update(tagUpdated);
         tagUpdated = _tagRepository.Update(tag);
         await CommitAsync();
         return tagUpdated;
     }
 
-    public async Task Remove(long tagId)
+    public async Task Deletar(long tagId)
     {
         BeginTransaction();
-        var item = await GetById(tagId);
+        var item = await ObterPorId(tagId);
         if (item != null)
             _tagRepository.Remove(item);
         await CommitAsync();
     }
 
-    public async Task<Tag?> GetById(long tagId)
+    public async Task<Tag?> ObterPorId(long tagId)
     {
         return await _tagRepository.GetById(tagId);
     }
 
-    public async virtual Task<bool> HasAny(Expression<Func<Tag, bool>> predicate, CancellationToken cancellationToken)
+    public async virtual Task<bool> PossuiAlgum(Expression<Func<Tag, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _tagRepository.HasAnyAsync(predicate, cancellationToken);
     }

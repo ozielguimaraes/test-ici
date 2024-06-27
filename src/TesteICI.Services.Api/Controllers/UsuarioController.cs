@@ -29,15 +29,15 @@ public class UsuarioController : BaseController
 
     [AllowAnonymous]
     [HttpPost]
-    [Route("signup")]
+    [Route("")]
     [ProducesResponseType(typeof(AdicionarUsuarioResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Signup(AdicionarUsuarioRequest request)
+    public async Task<IActionResult> Adicionar(AdicionarUsuarioRequest request)
     {
         try
         {
-            Logger.LogInformation($"Method: {nameof(Signup)} - POST");
+            Logger.LogInformation($"Method: {nameof(Adicionar)} - POST");
 
             var response = await _usuarioBusiness.Create(request);
             if (response.IsValid())
@@ -53,10 +53,10 @@ public class UsuarioController : BaseController
                     await _signInManager.SignInAsync(identityUser, false);
                 }
 
-                return ResultWhenAdding(response);
+                return ResultadoQuandoAdicionando(response);
             }
 
-            return ResultWhenAdding(response);
+            return ResultadoQuandoAdicionando(response);
         }
         catch (Exception ex)
         {

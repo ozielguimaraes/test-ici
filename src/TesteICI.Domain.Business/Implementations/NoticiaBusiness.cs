@@ -1,5 +1,7 @@
+using FluentValidation;
 using TesteICI.Domain.Business.Interfaces;
 using TesteICI.Domain.Business.Requests.Noticia;
+using TesteICI.Domain.Business.Responses;
 using TesteICI.Domain.Business.Responses.Noticia;
 using TesteICI.Domain.Entities;
 using TesteICI.Domain.Interfaces.Services;
@@ -9,23 +11,24 @@ namespace TesteICI.Domain.Business.Implementations
     public class NoticiaBusiness : INoticiaBusiness
     {
         private readonly INoticiaService _noticiaService;
+        private readonly IValidator<AdicionarNoticiaRequest> _adicionarValidator;
+        private readonly IValidator<EditarNoticiaRequest> _editarValidator;
 
-        public NoticiaBusiness(INoticiaService noticiaService)
+        public NoticiaBusiness(INoticiaService noticiaService, IValidator<AdicionarNoticiaRequest> adicionarValidator, IValidator<EditarNoticiaRequest> editarValidator)
         {
             _noticiaService = noticiaService;
+            _adicionarValidator = adicionarValidator;
+            _editarValidator = editarValidator;
         }
 
-        public async Task<AdicionarNoticiaResponse> Create(AdicionarNoticiaRequest request)
+        public async Task<AdicionarNoticiaResponse> Adicionar(AdicionarNoticiaRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            if (string.IsNullOrWhiteSpace(request.Titulo))
-                throw new ArgumentNullException(nameof(request.Titulo));
-            if (string.IsNullOrWhiteSpace(request.Texto))
-                throw new ArgumentNullException(nameof(request.Texto));
+            var resultadoValidacao = await _adicionarValidator.ValidateAsync(request);
 
-            if (request.UsuarioId == 0)
-                throw new ArgumentNullException(nameof(request.UsuarioId));
+            if (!resultadoValidacao.IsValid)
+                return new AdicionarNoticiaResponse(resultadoValidacao);
 
             var noticia = new Noticia(request.Titulo, request.Texto, request.UsuarioId);
 
@@ -34,20 +37,28 @@ namespace TesteICI.Domain.Business.Implementations
             return new AdicionarNoticiaResponse(result.NoticiaId);
         }
 
-        public async Task<EditarNoticiaResponse> Update(EditarNoticiaRequest request)
+        public async Task<EditarNoticiaResponse> Editar(EditarNoticiaRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            if (string.IsNullOrWhiteSpace(request.Titulo))
-                throw new ArgumentNullException(nameof(request.Titulo));
-            if (string.IsNullOrWhiteSpace(request.Texto))
-                throw new ArgumentNullException(nameof(request.Texto));
 
-            if (request.UsuarioId == 0)
-                throw new ArgumentNullException(nameof(request.UsuarioId));
+            var resultadoValidacao = await _editarValidator.ValidateAsync(request);
 
+            if (!resultadoValidacao.IsValid)
+                return new EditarNoticiaResponse(resultadoValidacao);
             var noticia = new Noticia(request.NoticiaId, request.Titulo, request.Texto, request.UsuarioId);
+
             var result = await _noticiaService.Update(noticia);
+
+            if (result is null)
+                return new EditarNoticiaResponse(new FluentValidation.Results.ValidationResult
+                {
+                    Errors = new List<FluentValidation.Results.ValidationFailure>
+                {
+                    new FluentValidation.Results.ValidationFailure("NoticiaId", "Noticia não encontrada")
+                }
+                });
+
             return new EditarNoticiaResponse(result.NoticiaId);
         }
 
@@ -57,11 +68,14 @@ namespace TesteICI.Domain.Business.Implementations
             return await Task.FromResult(result.Select(x => MapearParaResposta(x)).ToList());
         }
 
-        public async Task<NoticiaResponse> GetById(long NoticiaId)
+        public async Task<BaseResponse> ObterPorId(long noticiaId)
         {
-            var result = await _noticiaService.GetById(NoticiaId);
+            var noticia = await _noticiaService.GetById(noticiaId);
 
-            return MapearParaResposta(result);
+            if (noticia is null)
+                return new NullResponse();
+
+            return MapearParaResposta(noticia);
         }
 
         private NoticiaResponse MapearParaResposta(Noticia noticia)

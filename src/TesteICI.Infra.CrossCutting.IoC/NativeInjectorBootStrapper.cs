@@ -5,8 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using TesteICI.Domain.Business.Implementations;
 using TesteICI.Domain.Business.Interfaces;
 using TesteICI.Domain.Business.Requests.Auth;
+using TesteICI.Domain.Business.Requests.Noticia;
 using TesteICI.Domain.Business.Requests.Tag;
 using TesteICI.Domain.Business.Validations.Auth;
+using TesteICI.Domain.Business.Validations.Noticia;
 using TesteICI.Domain.Business.Validations.Tag;
 using TesteICI.Domain.Interfaces;
 using TesteICI.Domain.Interfaces.Repositories;
@@ -51,17 +53,13 @@ public static class NativeInjectorBootStrapper
         services.AddDbContext<MainContext>();
 
         // Registrar FluentValidation
-        //services.AddValidatorsFromAssemblyContaining<SignupRequestValidator>();
-
         services.AddScoped<IValidator<EfetuarLoginRequest>, EfetuarLoginRequestValidator>();
         services.AddScoped<IValidator<SeCadastrarRequest>, SeCadastrarRequestValidator>();
+
         services.AddScoped<IValidator<EditarTagRequest>, EditarTagRequestValidator>();
         services.AddScoped<IValidator<AdicionarTagRequest>, AdicionarTagRequestValidator>();
 
-        //services.AddValidatorsFromAssemblyContaining<SigninRequestValidator>();
-
-        // Adicionar FluentValidation ao ASP.NET Core pipeline
-        //services.AddFluentValidationAutoValidation();
-        //services.AddFluentValidationClientsideAdapters();
+        services.AddScoped<IValidator<EditarNoticiaRequest>, EditarNoticiaRequestValidator>();
+        services.AddScoped<IValidator<AdicionarNoticiaRequest>, AdicionarNoticiaRequestValidator>();
     }
 }

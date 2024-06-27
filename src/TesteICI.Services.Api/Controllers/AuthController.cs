@@ -62,7 +62,7 @@ public class AuthController : BaseController
                 return ResultWhenAdding(result, identityUser);
             }
 
-            return ResultWhenAdding(response);
+            return ResultadoQuandoAdicionando(response);
         }
         catch (Exception ex)
         {

@@ -10,32 +10,32 @@ namespace TesteICI.Domain.Business.Implementations;
 public sealed class AuthBusiness : IAuthBusiness
 {
     private readonly IUsuarioBusiness _usuarioBusiness;
-    private readonly IValidator<SeCadastrarRequest> _signupValidator;
+    private readonly IValidator<SeCadastrarRequest> _seCadastrarValidator;
+    private readonly IValidator<EfetuarLoginRequest> _efetuarLoginValidator;
     private readonly ISecurityService _securityService;
 
-    public AuthBusiness(IUsuarioBusiness usuarioBusiness, IValidator<SeCadastrarRequest> signupValidator, ISecurityService securityService)
+    public AuthBusiness(IUsuarioBusiness usuarioBusiness, IValidator<SeCadastrarRequest> seCadastrarValidator, ISecurityService securityService, IValidator<EfetuarLoginRequest> efetuarLoginValidator)
     {
         _usuarioBusiness = usuarioBusiness;
-        _signupValidator = signupValidator;
+        _seCadastrarValidator = seCadastrarValidator;
+        _efetuarLoginValidator = efetuarLoginValidator;
         _securityService = securityService;
     }
 
     public async Task<SeCadastrarResponse> Validate(SeCadastrarRequest request, CancellationToken cancellationToken)
     {
-        var result = await _signupValidator.ValidateAsync(request, cancellationToken);
+        var resultadoValidacao = await _seCadastrarValidator.ValidateAsync(request, cancellationToken);
 
-        return new SeCadastrarResponse(result);
+        return new SeCadastrarResponse(resultadoValidacao);
     }
 
     public async Task<EfetuarLoginResponse> Validate(EfetuarLoginRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        if (string.IsNullOrWhiteSpace(request.Login))
-            throw new ArgumentNullException(nameof(request.Login));
-
-        if (string.IsNullOrEmpty(request.Senha))
-            throw new ArgumentNullException(nameof(request.Senha));
+        var resultadoValidacao = await _efetuarLoginValidator.ValidateAsync(request);
+        if (!resultadoValidacao.IsValid)
+            return new EfetuarLoginResponse(resultadoValidacao);
 
         var usuario = await _securityService.ObterPorEmailAsync(request.Login);
 

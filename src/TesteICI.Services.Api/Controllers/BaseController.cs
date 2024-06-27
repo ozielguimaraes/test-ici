@@ -17,7 +17,7 @@ public abstract class BaseController : ControllerBase
         Logger = logger;
     }
 
-    protected ObjectResult ResultWhenAdding(BaseResponse response)
+    protected ObjectResult ResultadoQuandoAdicionando(BaseResponse response)
     {
         if (response.IsValid())
         {
@@ -28,7 +28,7 @@ public abstract class BaseController : ControllerBase
         return BadRequest(response.GetValidationFailures());
     }
 
-    protected ObjectResult ResultWhenUpdating(BaseResponse response)
+    protected ObjectResult ResultadoQuandoEditando(BaseResponse response)
     {
         if (response.IsValid())
         {
@@ -39,8 +39,31 @@ public abstract class BaseController : ControllerBase
         return BadRequest(response.GetValidationFailures());
     }
 
+    protected ObjectResult ResultadoQuandoRemovendo(BaseResponse response)
+    {
+        if (response is NullResponse)
+        {
+            Logger.LogInformation("item not found");
+            return StatusCode(StatusCodes.Status404NotFound, response);
+        }
+
+        if (response.IsValid())
+        {
+            Logger.LogInformation("item deletado");
+            return StatusCode(StatusCodes.Status204NoContent, response);
+        }
+
+        return BadRequest(response.GetValidationFailures());
+    }
+
     protected ObjectResult ResultWhenSearching(BaseResponse response)
     {
+        if (response is NullResponse)
+        {
+            Logger.LogInformation("item not found");
+            return StatusCode(StatusCodes.Status404NotFound, response);
+        }
+
         return Ok(response);
     }
 

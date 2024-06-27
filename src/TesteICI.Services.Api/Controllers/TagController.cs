@@ -32,7 +32,7 @@ public class TagController : BaseController
         {
             Logger.LogInformation($"Method: {nameof(Get)} - GET");
             Logger.LogInformation($"tagId: {tagId}");
-            return ResultWhenSearching(await _tagBusiness.GetById(tagId));
+            return ResultWhenSearching(await _tagBusiness.ObterPorId(tagId));
         }
         catch (Exception ex)
         {
@@ -66,12 +66,12 @@ public class TagController : BaseController
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] AdicionarTagRequest request)
+    public async Task<IActionResult> Adicionar([FromBody] AdicionarTagRequest request)
     {
         try
         {
-            Logger.LogInformation($"Method: {nameof(Get)} - POST");
-            return ResultWhenAdding(await _tagBusiness.Create(request));
+            Logger.LogInformation($"Method: {nameof(Adicionar)} - POST");
+            return ResultadoQuandoAdicionando(await _tagBusiness.Adicionar(request));
         }
         catch (Exception ex)
         {
@@ -86,12 +86,32 @@ public class TagController : BaseController
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update([FromBody] EditarTagRequest request)
+    public async Task<IActionResult> Editar([FromBody] EditarTagRequest request)
     {
         try
         {
-            Logger.LogInformation($"Method: {nameof(Get)} - PUT");
-            return ResultWhenUpdating(await _tagBusiness.Update(request));
+            Logger.LogInformation($"Method: {nameof(Editar)} - PUT");
+            return ResultadoQuandoEditando(await _tagBusiness.Editar(request));
+        }
+        catch (Exception ex)
+        {
+            var message = "Error to update Tag";
+            Logger.LogError(ex, message);
+            return InternalServerError(ex, message);
+        }
+    }
+
+    [HttpDelete]
+    [Route("")]
+    [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Deletar([FromBody] EditarTagRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            Logger.LogInformation($"Method: {nameof(Deletar)} - DELETE");
+            return ResultadoQuandoRemovendo(await _tagBusiness.Deletar(request, cancellationToken));
         }
         catch (Exception ex)
         {

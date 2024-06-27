@@ -1,6 +1,7 @@
 using FluentValidation;
 using TesteICI.Domain.Business.Interfaces;
 using TesteICI.Domain.Business.Requests.Tag;
+using TesteICI.Domain.Business.Responses;
 using TesteICI.Domain.Business.Responses.Tag;
 using TesteICI.Domain.Entities;
 using TesteICI.Domain.Interfaces.Services;
@@ -20,7 +21,7 @@ public class TagBusiness : ITagBusiness
         _adicionarTagValidator = adicionarTagValidator;
     }
 
-    public async Task<AdicionarTagResponse> Create(AdicionarTagRequest request)
+    public async Task<AdicionarTagResponse> Adicionar(AdicionarTagRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -29,12 +30,19 @@ public class TagBusiness : ITagBusiness
             return new AdicionarTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.Descricao);
-        var result = await _tagService.Add(tag);
+        var result = await _tagService.Adicionar(tag);
 
         return new AdicionarTagResponse(result.TagId);
     }
 
-    public async Task<EditarTagResponse> Update(EditarTagRequest request)
+    public async Task<BaseResponse> Deletar(EditarTagRequest request, CancellationToken cancellationToken)
+    {
+        await _tagService.Deletar(request.TagId);
+
+        return new NullResponse();
+    }
+
+    public async Task<EditarTagResponse> Editar(EditarTagRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -43,7 +51,16 @@ public class TagBusiness : ITagBusiness
             return new EditarTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.TagId, request.Descricao);
-        var result = await _tagService.Update(tag);
+        var result = await _tagService.Editar(tag);
+
+        if (result is null)
+            return new EditarTagResponse(new FluentValidation.Results.ValidationResult
+            {
+                Errors = new List<FluentValidation.Results.ValidationFailure>
+                {
+                    new FluentValidation.Results.ValidationFailure("TagId", "Tag não encontrada")
+                }
+            });
 
         return new EditarTagResponse(result.TagId, request.Descricao);
     }
@@ -55,9 +72,9 @@ public class TagBusiness : ITagBusiness
         return await Task.FromResult(tags.Select(x => new TagResponse(x)).ToList());
     }
 
-    public async Task<TagResponse> GetById(long tagId)
+    public async Task<TagResponse> ObterPorId(long tagId)
     {
-        var result = await _tagService.GetById(tagId);
+        var result = await _tagService.ObterPorId(tagId);
         if (result is null)
             return new TagResponse(new FluentValidation.Results.ValidationResult
             {

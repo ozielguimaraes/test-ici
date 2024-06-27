@@ -32,7 +32,7 @@ namespace TesteICI.Services.Api.Controllers
             {
                 Logger.LogInformation($"Method: {nameof(Get)} - GET");
                 Logger.LogInformation($"noticiaId: {noticiaId}");
-                return ResultWhenSearching(await _noticiaBusiness.GetById(noticiaId));
+                return ResultWhenSearching(await _noticiaBusiness.ObterPorId(noticiaId));
             }
             catch (Exception ex)
             {
@@ -47,12 +47,12 @@ namespace TesteICI.Services.Api.Controllers
         [ProducesResponseType(typeof(NoticiaResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] AdicionarNoticiaRequest request)
+        public async Task<IActionResult> Adicionar([FromBody] AdicionarNoticiaRequest request)
         {
             try
             {
-                Logger.LogInformation($"Method: {nameof(Get)} - POST");
-                return ResultWhenAdding(await _noticiaBusiness.Create(request));
+                Logger.LogInformation($"Method: {nameof(Adicionar)} - POST");
+                return ResultadoQuandoAdicionando(await _noticiaBusiness.Adicionar(request));
             }
             catch (Exception ex)
             {
@@ -67,12 +67,12 @@ namespace TesteICI.Services.Api.Controllers
         [ProducesResponseType(typeof(NoticiaResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update([FromBody] EditarNoticiaRequest request)
+        public async Task<IActionResult> Editar([FromBody] EditarNoticiaRequest request)
         {
             try
             {
-                Logger.LogInformation($"Method: {nameof(Get)} - PUT");
-                return ResultWhenUpdating(await _noticiaBusiness.Update(request));
+                Logger.LogInformation($"Method: {nameof(Editar)} - PUT");
+                return ResultadoQuandoEditando(await _noticiaBusiness.Editar(request));
             }
             catch (Exception ex)
             {
