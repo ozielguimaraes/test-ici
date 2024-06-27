@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.9.2" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TesteICI.Domain\TesteICI.Domain.csproj" />
+    <ProjectReference Include="..\TesteICI.Infra.CrossCutting.Security\TesteICI.Infra.CrossCutting.Security.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validations\Noticia\" />
+    <Folder Include="Validations\Usuario\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,70 @@
+@TesteICI.Services.Api_HostAddress = https://localhost:7074
+
+GET {{TesteICI.Services.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{TesteICI.Services.Api_HostAddress}}/api/noticia
+Content-Type: application/json
+
+{
+  //CreateNoticiaRequest
+}
+
+###
+
+PUT {{TesteICI.Services.Api_HostAddress}}/api/noticia
+Content-Type: application/json
+
+{
+  //UpdateNoticiaRequest
+}
+
+###
+
+GET {{TesteICI.Services.Api_HostAddress}}/api/noticia/{noticiaId:int}?noticiaId=0
+
+###
+
+GET {{TesteICI.Services.Api_HostAddress}}/api/tag
+
+###
+
+POST {{TesteICI.Services.Api_HostAddress}}/api/tag
+Content-Type: application/json
+
+{
+  //CreateTagRequest
+}
+
+###
+
+PUT {{TesteICI.Services.Api_HostAddress}}/api/tag
+Content-Type: application/json
+
+{
+  //UpdateTagRequest
+}
+
+###
+
+GET {{TesteICI.Services.Api_HostAddress}}/api/tag/{tagId:int}?tagId=0
+
+###
+
+POST {{TesteICI.Services.Api_HostAddress}}/api/usuario/signin
+Content-Type: application/json
+
+{
+  //EfetuarLoginRequest
+}
+
+###
+
+POST {{TesteICI.Services.Api_HostAddress}}/api/usuario/signup
+Content-Type: application/json
+
+{
+  //CreateUsuarioRequest
+}
