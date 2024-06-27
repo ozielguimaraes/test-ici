@@ -30,7 +30,13 @@ public abstract class BaseController : ControllerBase
 
     protected ObjectResult ResultWhenUpdating(BaseResponse response)
     {
-        return Ok(response);
+        if (response.IsValid())
+        {
+            Logger.LogInformation($"item updated: {response}");
+            return StatusCode(StatusCodes.Status200OK, response);
+        }
+
+        return BadRequest(response.GetValidationFailures());
     }
 
     protected ObjectResult ResultWhenSearching(BaseResponse response)
