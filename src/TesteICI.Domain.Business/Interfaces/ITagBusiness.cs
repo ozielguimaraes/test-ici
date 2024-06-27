@@ -6,10 +6,10 @@ namespace TesteICI.Domain.Business.Interfaces
 {
     public interface ITagBusiness
     {
-        Task<TagResponse> ObterPorId(long tagId);
+        Task<BaseResponse> ObterPorId(long tagId);
         Task<IEnumerable<TagResponse>> GetAllAsync();
         Task<AdicionarTagResponse> Adicionar(AdicionarTagRequest request);
         Task<EditarTagResponse> Editar(EditarTagRequest request);
-        Task<BaseResponse> Deletar(EditarTagRequest request, CancellationToken cancellationToken);
+        Task<BaseResponse> Deletar(long tagId, CancellationToken cancellationToken);
     }
 }

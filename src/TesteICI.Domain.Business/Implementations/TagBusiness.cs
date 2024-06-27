@@ -26,6 +26,7 @@ public class TagBusiness : ITagBusiness
         ArgumentNullException.ThrowIfNull(request);
 
         var resultadoValidacao = await _adicionarTagValidator.ValidateAsync(request);
+
         if (!resultadoValidacao.IsValid)
             return new AdicionarTagResponse(resultadoValidacao);
 
@@ -35,9 +36,12 @@ public class TagBusiness : ITagBusiness
         return new AdicionarTagResponse(result.TagId);
     }
 
-    public async Task<BaseResponse> Deletar(EditarTagRequest request, CancellationToken cancellationToken)
+    public async Task<BaseResponse> Deletar(long tagId, CancellationToken cancellationToken)
     {
-        await _tagService.Deletar(request.TagId);
+        var foiDeletado = await _tagService.Deletar(tagId);
+
+        if (foiDeletado)
+            return new EmptyResponse();
 
         return new NullResponse();
     }
@@ -72,17 +76,11 @@ public class TagBusiness : ITagBusiness
         return await Task.FromResult(tags.Select(x => new TagResponse(x)).ToList());
     }
 
-    public async Task<TagResponse> ObterPorId(long tagId)
+    public async Task<BaseResponse> ObterPorId(long tagId)
     {
         var result = await _tagService.ObterPorId(tagId);
         if (result is null)
-            return new TagResponse(new FluentValidation.Results.ValidationResult
-            {
-                Errors = new List<FluentValidation.Results.ValidationFailure>
-                {
-                    new FluentValidation.Results.ValidationFailure("TagId", "Tag não encontrada")
-                }
-            });
+            return new NullResponse();
 
         return new TagResponse(result);
     }

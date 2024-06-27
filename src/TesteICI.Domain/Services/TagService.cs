@@ -34,16 +34,21 @@ public class TagService : BaseService, ITagService
         tag.Update(tagUpdated);
         tagUpdated = _tagRepository.Update(tag);
         await CommitAsync();
+
         return tagUpdated;
     }
 
-    public async Task Deletar(long tagId)
+    public async Task<bool> Deletar(long tagId)
     {
         BeginTransaction();
         var item = await ObterPorId(tagId);
-        if (item != null)
-            _tagRepository.Remove(item);
+        if (item is null)
+            return false;
+
+        _tagRepository.Remove(item);
         await CommitAsync();
+
+        return true;
     }
 
     public async Task<Tag?> ObterPorId(long tagId)

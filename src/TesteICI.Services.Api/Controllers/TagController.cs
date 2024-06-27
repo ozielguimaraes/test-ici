@@ -102,16 +102,16 @@ public class TagController : BaseController
     }
 
     [HttpDelete]
-    [Route("")]
+    [Route("{tagId:int}")]
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Deletar([FromBody] EditarTagRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Deletar([FromRoute] long tagId, CancellationToken cancellationToken)
     {
         try
         {
             Logger.LogInformation($"Method: {nameof(Deletar)} - DELETE");
-            return ResultadoQuandoRemovendo(await _tagBusiness.Deletar(request, cancellationToken));
+            return ResultadoQuandoRemovendo(await _tagBusiness.Deletar(tagId, cancellationToken));
         }
         catch (Exception ex)
         {
