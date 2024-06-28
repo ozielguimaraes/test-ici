@@ -48,7 +48,7 @@ public class NoticiaController : BaseController
         if (noticia.IsValid())
             return Created();
         else
-            return BadRequest();
+            return BadRequest(noticia.GetValidationFailures());
     }
 
     [Route("editar/{noticiaId:long}")]
@@ -56,12 +56,20 @@ public class NoticiaController : BaseController
     {
         _logger.LogInformation("Acessou o endpoint de editar notícia.");
 
-        var noticia = await _noticiaBusiness.ObterPorId(noticiaId, cancellationToken);
+        var resposta = await _noticiaBusiness.ObterPorId(noticiaId, cancellationToken);
 
-        if (noticia is null || noticia is NullResponse)
+        if (resposta is null || resposta is NullResponse)
             return NotFound();
 
-        return View(noticia);
+        var noticia = (NoticiaResponse)resposta;
+        return View(new EditarNoticiaRequest
+        {
+            NoticiaId = noticiaId,
+            Titulo = noticia.Titulo,
+            Texto = noticia.Texto,
+            UsuarioId = noticia.UsuarioId,
+            TagIds = noticia.Tags.Select(x => x.TagId).ToList()
+        });
     }
 
     [Route("editar")]

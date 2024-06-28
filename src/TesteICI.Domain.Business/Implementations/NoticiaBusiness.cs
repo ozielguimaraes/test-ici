@@ -3,6 +3,7 @@ using TesteICI.Domain.Business.Interfaces;
 using TesteICI.Domain.Business.Requests.Noticia;
 using TesteICI.Domain.Business.Responses;
 using TesteICI.Domain.Business.Responses.Noticia;
+using TesteICI.Domain.Business.Responses.Tag;
 using TesteICI.Domain.Entities;
 using TesteICI.Domain.Interfaces.Services;
 using TesteICI.Infra.CrossCutting.Security.Shared;
@@ -28,6 +29,8 @@ namespace TesteICI.Domain.Business.Implementations
         {
             ArgumentNullException.ThrowIfNull(request);
 
+            request.UsuarioId = _user.GetUserId();
+
             var resultadoValidacao = await _adicionarValidator.ValidateAsync(request);
 
             if (!resultadoValidacao.IsValid)
@@ -44,6 +47,7 @@ namespace TesteICI.Domain.Business.Implementations
         public async Task<EditarNoticiaResponse> Editar(EditarNoticiaRequest request, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(request);
+            request.UsuarioId = _user.GetUserId();
 
             var resultadoValidacao = await _editarValidator.ValidateAsync(request, cancellationToken);
 
@@ -95,7 +99,17 @@ namespace TesteICI.Domain.Business.Implementations
         private NoticiaResponse MapearParaResposta(Noticia noticia)
         {
             //TODO poderia Usar automapper ou algo do tipo
-            return new NoticiaResponse(noticia.NoticiaId, noticia.Titulo, noticia.Texto, noticia.UsuarioId);
+            var tags = new List<NoticiaTagResponse>();
+
+            foreach (var tag in noticia.Tags)
+            {
+                if (tag.Tag is not null)
+                    tags.Add(new NoticiaTagResponse(tag.NoticiaTagId, tag.TagId, new TagResponse(tag.Tag)));
+                else
+                    tags.Add(new NoticiaTagResponse(tag.NoticiaTagId, tag.TagId));
+            }
+
+            return new NoticiaResponse(noticia.NoticiaId, noticia.Titulo, noticia.Texto, noticia.UsuarioId, tags: tags);
         }
     }
 }

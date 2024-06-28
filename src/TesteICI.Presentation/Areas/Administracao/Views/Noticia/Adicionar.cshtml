@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <button type="button" class="btn btn-primary">Salvar</button>
+    <button type="submit" class="btn btn-primary">Salvar</button>
 </form>
 @section Scripts {
     @{
@@ -90,12 +90,10 @@
                     },
                     Texto: {
                         requiredSummernote: true,
-                        lengthSummernote: true,
-                        minlength: 200,
-                        maxlength: 8000
+                        lengthSummernote: true
                     },
                     TagIds: {
-                        required: true 
+                        required: true
                     }
                 },
                 messages: {
@@ -111,17 +109,20 @@
                     TagIds: {
                         required: "Selecione pelo menos uma tag."
                     }
-                },
-                submitHandler: function (form) {
-                    var url = $(form).attr('action');
-                    var token = $("input[name='__RequestVerificationToken']", form).val();
+                }
+            });
+
+            $('#formNoticia').on('submit', function (e) {
+                e.preventDefault();
+
+                if ($(this).valid()) { 
+                    var url = $(this).attr('action');
+                    var token = $("input[name='__RequestVerificationToken']", this).val();
 
                     var tagsSelecionadas = $('.select-tags').select2('data');
-
                     var tagIds = $.map(tagsSelecionadas, function (tag) {
                         return tag.id;
                     });
-                    debugger;
 
                     const model = {
                         "Titulo": $("#Titulo").val(),
@@ -129,14 +130,6 @@
                         "TagIds": tagIds
                     };
 
-                    if (model.Texto === '<p><br></p>') {
-                        alert('O conteúdo é obrigatório.');
-                        return false;
-                    } else if (model.Texto.length < 200) {
-                        alert('O conteúdo deve ter pelo menos 200 caracteres.');
-                        return false;
-                    }
-                    debugger;
                     $.ajax({
                         type: 'POST',
                         url: url,
@@ -147,18 +140,27 @@
                         },
                         success: function (response) {
                             alert('Notícia salva com sucesso');
-                            debugger;
 
                             window.location.href = '/Administracao/Noticia';
                         },
-                        error: function (response) {
-                            debugger;
+                        error: function (xhr, textStatus, errorThrown) {
+                            if (xhr.status === 400) {
+                                var errors = xhr.responseJSON;
 
-                            alert('Erro ao salvar notícia');
+                                if (errors && errors.length > 0) {
+                                    errors.forEach(function (error) {
+                                        if (error.propertyName === "Titulo") {
+                                            $('#Titulo').siblings(".text-danger").text(error.errorMessage);
+                                        } else if (error.propertyName === "Texto") {
+                                            $('#Texto').siblings(".text-danger").text(error.errorMessage);
+                                        }
+                                    });
+                                }
+                            } else {
+                                alert('Erro ao salvar notícia');
+                            }
                         }
                     });
-
-                    return false;
                 }
             });
         });

@@ -37,6 +37,14 @@ public class Noticia
         Titulo = noticiaUpdated.Titulo;
         Texto = noticiaUpdated.Texto;
         UsuarioId = noticiaUpdated.UsuarioId;
-        Tags = noticiaUpdated.Tags;
+
+        var tagsParaAdicionar = noticiaUpdated.Tags.Where(tag => Tags.All(t => t.TagId != tag.TagId)).ToList();
+        var tagsParaRemover = Tags.Where(tag => noticiaUpdated.Tags.All(t => t.TagId != tag.TagId)).ToList();
+
+        foreach (var tag in tagsParaAdicionar)
+            Tags.Add(tag);
+
+        foreach (var tag in tagsParaRemover)
+            Tags.Remove(tag);
     }
 }
