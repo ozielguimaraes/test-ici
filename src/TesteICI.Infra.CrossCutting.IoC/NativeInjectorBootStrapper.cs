@@ -36,16 +36,15 @@ public static class NativeInjectorBootStrapper
         // Domain.Business
         services.AddScoped<IAuthBusiness, AuthBusiness>();
         services.AddScoped<ITagBusiness, TagBusiness>();
+        services.AddScoped<INoticiaBusiness, NoticiaBusiness>();
         services.AddScoped<IUsuarioBusiness, UsuarioBusiness>();
 
         // Domain
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<INoticiaService, NoticiaService>();
-        services.AddScoped<IUsuarioService, UsuarioService>();
 
         // Infra - Data
         services.AddScoped<ITagRepository, TagRepository>();
-        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<INoticiaRepository, NoticiaRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();

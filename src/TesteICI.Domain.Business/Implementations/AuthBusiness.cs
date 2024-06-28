@@ -37,7 +37,7 @@ public sealed class AuthBusiness : IAuthBusiness
         if (!resultadoValidacao.IsValid)
             return new EfetuarLoginResponse(resultadoValidacao);
 
-        var usuario = await _securityService.ObterPorEmailAsync(request.Login);
+        var usuario = await _securityService.ObterPorEmailAsync(request.Login, cancellationToken);
 
         if (usuario is null)
             return new EfetuarLoginResponse(validationResult: new ValidationResult(new List<ValidationFailure>

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using TesteICI.Infra.CrossCutting.Security.Shared;
 using TesteICI.Infra.CrossCutting.Security.Extensions;
+using TesteICI.Infra.CrossCutting.Security.Shared;
 
 namespace TesteICI.Infra.CrossCutting.Security
 {
@@ -16,13 +14,15 @@ namespace TesteICI.Infra.CrossCutting.Security
             _accessor = accessor;
         }
 
+        public string Nome { get; set; }
+
         public string Name => _accessor.HttpContext.User.Identity.Name;
 
         public Guid GetUserId()
         {
             if (IsAuthenticated)
             {
-                _ = Guid.TryParse(_accessor.HttpContext.User.GetUserId(), out Guid userId);
+                _ = Guid.TryParse(_accessor.HttpContext?.User.GetUserId(), out Guid userId);
                 return userId;
             }
             return Guid.Empty;

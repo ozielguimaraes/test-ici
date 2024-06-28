@@ -4,13 +4,13 @@ namespace TesteICI.Domain.Interfaces.Repositories
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {
-        TEntity Add(TEntity obj);
-        TEntity Update(TEntity obj);
-        void Remove(TEntity obj);
-        Task<TEntity?> GetById(long id);
+        TEntity Adicionar(TEntity obj);
+        TEntity Editar(TEntity obj);
+        void Remover(TEntity obj);
+        Task<TEntity?> ObterPorId(long id, CancellationToken cancellationToken);
         Task<bool> HasAnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
         IQueryable<TEntity> All();
         IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> predicate);
-        Task<int> SaveChanges();
+        Task<int> SaveChanges(CancellationToken cancellationToken);
     }
 }

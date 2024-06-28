@@ -1,5 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace TesteICI.Infra.CrossCutting.Security.Shared
@@ -7,6 +5,7 @@ namespace TesteICI.Infra.CrossCutting.Security.Shared
     public interface IUser
     {
         string Name { get; }
+        string Nome { get; }
         bool IsAuthenticated { get; }
         Guid GetUserId();
         string GetUserEmail();

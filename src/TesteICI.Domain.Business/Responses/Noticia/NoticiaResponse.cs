@@ -1,8 +1,8 @@
-﻿namespace TesteICI.Domain.Business.Responses.Noticia
+namespace TesteICI.Domain.Business.Responses.Noticia
 {
     public class NoticiaResponse : BaseResponse
     {
-        public NoticiaResponse(long noticiaId, string titulo, string texto, long usuarioId)
+        public NoticiaResponse(long noticiaId, string titulo, string texto, Guid usuarioId)
         {
             NoticiaId = noticiaId;
             Titulo = titulo;
@@ -13,6 +13,6 @@
         public long NoticiaId { get; private set; }
         public string Titulo { get; private set; }
         public string Texto { get; private set; }
-        public long UsuarioId { get; private set; }
+        public Guid UsuarioId { get; private set; }
     }
 }

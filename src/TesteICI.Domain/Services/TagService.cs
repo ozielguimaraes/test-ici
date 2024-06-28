@@ -15,50 +15,55 @@ public class TagService : BaseService, ITagService
         _tagRepository = tagRepository;
     }
 
-    public async Task<Tag> Adicionar(Tag tag)
+    public async Task<Tag> Adicionar(Tag tag, CancellationToken cancellationToken)
     {
         BeginTransaction();
-        tag = _tagRepository.Add(tag);
-        await CommitAsync();
+        tag = _tagRepository.Adicionar(tag);
+        await CommitAsync(cancellationToken);
         return tag;
     }
 
-    public async Task<Tag?> Editar(Tag tagUpdated)
+    public async Task<Tag?> Editar(Tag tagUpdated, CancellationToken cancellationToken)
     {
         BeginTransaction();
-        var tag = await ObterPorId(tagUpdated.TagId);
+        var tag = await ObterPorId(tagUpdated.TagId, cancellationToken);
 
         if (tag is null)
             return null;
 
         tag.Update(tagUpdated);
-        tagUpdated = _tagRepository.Update(tag);
-        await CommitAsync();
+        tagUpdated = _tagRepository.Editar(tag);
+        await CommitAsync(cancellationToken);
 
         return tagUpdated;
     }
 
-    public async Task<bool> Deletar(long tagId)
+    public async Task<bool> Deletar(long tagId, CancellationToken cancellationToken)
     {
         BeginTransaction();
-        var item = await ObterPorId(tagId);
+        var item = await ObterPorId(tagId, cancellationToken);
         if (item is null)
             return false;
 
-        _tagRepository.Remove(item);
-        await CommitAsync();
+        _tagRepository.Remover(item);
+        await CommitAsync(cancellationToken);
 
         return true;
     }
 
-    public async Task<Tag?> ObterPorId(long tagId)
+    public async Task<Tag?> ObterPorId(long tagId, CancellationToken cancellationToken)
     {
-        return await _tagRepository.GetById(tagId);
+        return await _tagRepository.ObterPorId(tagId, cancellationToken);
     }
 
     public async virtual Task<bool> PossuiAlgum(Expression<Func<Tag, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _tagRepository.HasAnyAsync(predicate, cancellationToken);
+    }
+
+    public async Task<bool> TodosExistem(List<long> ids, CancellationToken token)
+    {
+        return await _tagRepository.TodosExistem(ids, token);
     }
 
     public async Task<IQueryable<Tag>> Filter(Expression<Func<Tag, bool>> predicate)

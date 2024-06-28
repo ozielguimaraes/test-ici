@@ -1,18 +1,18 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using TesteICI.Domain.Business.Interfaces;
 using TesteICI.Domain.Business.Requests.Auth;
-using TesteICI.Domain.Interfaces.Services;
 
 namespace TesteICI.Domain.Business.Validations.Auth;
 public sealed class SeCadastrarRequestValidator : AbstractValidator<SeCadastrarRequest>
 {
-    private readonly IUsuarioService _usuarioService;
+    private readonly IUsuarioBusiness _usuarioBusiness;
 
-    public SeCadastrarRequestValidator(IUsuarioService usuarioService, IOptions<IdentityOptions> identityOptions)
+    public SeCadastrarRequestValidator(IOptions<IdentityOptions> identityOptions, IUsuarioBusiness usuarioBusiness)
     {
         var passwordOptions = identityOptions.Value.Password;
-        _usuarioService = usuarioService;
+        _usuarioBusiness = usuarioBusiness;
 
         RuleFor(x => x.Nome)
             .NotEmpty().WithMessage("O nome é obrigatório.")
@@ -32,6 +32,6 @@ public sealed class SeCadastrarRequestValidator : AbstractValidator<SeCadastrarR
 
     private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
     {
-        return !await _usuarioService.EmailExiste(email, cancellationToken);
+        return !await _usuarioBusiness.EmailExiste(email, cancellationToken);
     }
 }

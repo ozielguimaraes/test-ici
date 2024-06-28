@@ -23,9 +23,9 @@ public sealed class EditarTagRequestValidator : AbstractValidator<EditarTagReque
             .MustAsync(TagExiste).WithMessage("Tag não encontrada.");
     }
 
-    private async Task<bool> TagExiste(long id, CancellationToken token)
+    private async Task<bool> TagExiste(long id, CancellationToken cancellationToken)
     {
-        var tag = await _tagService.ObterPorId(id);
+        var tag = await _tagService.ObterPorId(id, cancellationToken);
 
         return tag is not null;
     }

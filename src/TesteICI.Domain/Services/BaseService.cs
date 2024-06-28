@@ -1,4 +1,3 @@
-﻿using System.Threading.Tasks;
 using TesteICI.Domain.Interfaces;
 
 namespace TesteICI.Domain.Services
@@ -22,9 +21,9 @@ namespace TesteICI.Domain.Services
             _uow.Commit();
         }
 
-        public Task<int> CommitAsync()
+        public Task<int> CommitAsync(CancellationToken cancellationToken)
         {
-            return _uow.CommitAsync();
+            return _uow.CommitAsync(cancellationToken);
         }
     }
 }

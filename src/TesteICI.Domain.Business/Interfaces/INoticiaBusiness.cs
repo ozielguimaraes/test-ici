@@ -6,8 +6,9 @@ namespace TesteICI.Domain.Business.Interfaces
 {
     public interface INoticiaBusiness
     {
-        Task<AdicionarNoticiaResponse> Adicionar(AdicionarNoticiaRequest request);
-        Task<EditarNoticiaResponse> Editar(EditarNoticiaRequest request);
-        Task<BaseResponse> ObterPorId(long noticiaId);
+        Task<AdicionarNoticiaResponse> Adicionar(AdicionarNoticiaRequest request, CancellationToken cancellationToken);
+        Task<BaseResponse> Deletar(long noticiaId, CancellationToken cancellationToken);
+        Task<EditarNoticiaResponse> Editar(EditarNoticiaRequest request, CancellationToken cancellationToken);
+        Task<BaseResponse> ObterPorId(long noticiaId, CancellationToken cancellationToken);
     }
 }

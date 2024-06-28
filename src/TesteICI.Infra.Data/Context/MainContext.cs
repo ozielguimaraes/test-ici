@@ -17,7 +17,6 @@ namespace TesteICI.Infra.Data.Context
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Noticia> Noticias { get; set; }
         public DbSet<NoticiaTag> NoticiaTags { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

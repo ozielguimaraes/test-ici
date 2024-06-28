@@ -21,14 +21,38 @@ public class AuthController : BaseController
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IJwtService _jwtService;
+    private readonly IUsuarioBusiness _usuarioBusiness;
 
-    public AuthController(ILogger<BaseController> logger, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IAuthBusiness authBusiness, IConfiguration configuration, IJwtService jwtService) : base(logger)
+    public AuthController(ILogger<BaseController> logger, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IAuthBusiness authBusiness, IConfiguration configuration, IJwtService jwtService, IUsuarioBusiness usuarioBusiness) : base(logger)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _authBusiness = authBusiness;
         _configuration = configuration;
         _jwtService = jwtService;
+        _usuarioBusiness = usuarioBusiness;
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
+    [Route("")]
+    [ProducesResponseType(typeof(SeCadastrarResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ObterInformacoes(CancellationToken cancellationToken)
+    {
+        try
+        {
+            Logger.LogInformation($"Method: {nameof(ObterInformacoes)} - POST");
+
+            var resposta = await _usuarioBusiness.ObterInformacoes();
+
+            return ResultadoQuandoPesquisando(resposta);
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex, message: "Error to signup");
+        }
     }
 
     [AllowAnonymous]
@@ -37,11 +61,11 @@ public class AuthController : BaseController
     [ProducesResponseType(typeof(SeCadastrarResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Signup(SeCadastrarRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SeCadastrar(SeCadastrarRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            Logger.LogInformation($"Method: {nameof(Signup)} - POST");
+            Logger.LogInformation($"Method: {nameof(SeCadastrar)} - POST");
 
             var response = await _authBusiness.Validate(request, cancellationToken);
 
@@ -53,6 +77,7 @@ public class AuthController : BaseController
                     UserName = request.Email,
                     EmailConfirmed = true
                 };
+                //todo salvar nome
                 var result = await _userManager.CreateAsync(identityUser, request.Senha);
                 if (result.Succeeded)
                 {
@@ -76,11 +101,11 @@ public class AuthController : BaseController
     [ProducesResponseType(typeof(EfetuarLoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Signin(EfetuarLoginRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> EfetuarLogin(EfetuarLoginRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            Logger.LogInformation($"Method: {nameof(Signin)} - POST");
+            Logger.LogInformation($"Method: {nameof(EfetuarLogin)} - POST");
 
             var response = await _authBusiness.Validate(request, cancellationToken);
 

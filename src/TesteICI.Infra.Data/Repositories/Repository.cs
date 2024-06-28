@@ -16,13 +16,13 @@ namespace TesteICI.Infra.Data.Repositories
             DbSet = Db.Set<TEntity>();
         }
 
-        public virtual TEntity Add(TEntity obj)
+        public virtual TEntity Adicionar(TEntity obj)
         {
             DbSet.Add(obj);
             return obj;
         }
 
-        public virtual TEntity Update(TEntity obj)
+        public virtual TEntity Editar(TEntity obj)
         {
             var entry = Db.Entry(obj);
             DbSet.Attach(obj);
@@ -31,14 +31,14 @@ namespace TesteICI.Infra.Data.Repositories
             return obj;
         }
 
-        public virtual void Remove(TEntity obj)
+        public virtual void Remover(TEntity obj)
         {
             DbSet.Remove(obj);
         }
 
-        public async virtual Task<TEntity?> GetById(long id)
+        public async virtual Task<TEntity?> ObterPorId(long id, CancellationToken cancellationToken)
         {
-            return await DbSet.FindAsync(id);
+            return await DbSet.FindAsync(id, cancellationToken);
         }
 
         public async virtual Task<bool> HasAnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
@@ -56,9 +56,9 @@ namespace TesteICI.Infra.Data.Repositories
             return DbSet.Where(predicate);
         }
 
-        public async virtual Task<int> SaveChanges()
+        public async virtual Task<int> SaveChanges(CancellationToken cancellationToken)
         {
-            return await Db.SaveChangesAsync();
+            return await Db.SaveChangesAsync(cancellationToken);
         }
 
         public void Dispose()

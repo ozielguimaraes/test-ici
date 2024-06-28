@@ -11,7 +11,15 @@ public sealed class SecurityService : ISecurityService
         _userManager = userManager;
     }
 
-    public async Task<IdentityUser> ObterPorEmailAsync(string email)
+    public async Task<bool> EmailExiste(string email)
+    {
+        ArgumentNullException.ThrowIfNull(email);
+        var usuario = await _userManager.FindByEmailAsync(email);
+
+        return usuario is not null;
+    }
+
+    public async Task<IdentityUser> ObterPorEmailAsync(string email, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(email);
 
@@ -21,11 +29,11 @@ public sealed class SecurityService : ISecurityService
         return usuario;
     }
 
-    public async Task<IdentityUser?> ObterPorIdAsync(string userId)
+    public async Task<IdentityUser?> ObterPorIdAsync(Guid userId)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        var usuario = await _userManager.FindByIdAsync(userId);
+        var usuario = await _userManager.FindByIdAsync(userId.ToString());
         ArgumentNullException.ThrowIfNull(usuario);
 
         return usuario;

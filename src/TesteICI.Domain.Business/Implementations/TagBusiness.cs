@@ -21,7 +21,7 @@ public class TagBusiness : ITagBusiness
         _adicionarTagValidator = adicionarTagValidator;
     }
 
-    public async Task<AdicionarTagResponse> Adicionar(AdicionarTagRequest request)
+    public async Task<AdicionarTagResponse> Adicionar(AdicionarTagRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -31,14 +31,14 @@ public class TagBusiness : ITagBusiness
             return new AdicionarTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.Descricao);
-        var result = await _tagService.Adicionar(tag);
+        var result = await _tagService.Adicionar(tag, cancellationToken);
 
         return new AdicionarTagResponse(result.TagId);
     }
 
     public async Task<BaseResponse> Deletar(long tagId, CancellationToken cancellationToken)
     {
-        var foiDeletado = await _tagService.Deletar(tagId);
+        var foiDeletado = await _tagService.Deletar(tagId, cancellationToken);
 
         if (foiDeletado)
             return new EmptyResponse();
@@ -46,7 +46,7 @@ public class TagBusiness : ITagBusiness
         return new NullResponse();
     }
 
-    public async Task<EditarTagResponse> Editar(EditarTagRequest request)
+    public async Task<EditarTagResponse> Editar(EditarTagRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -55,7 +55,7 @@ public class TagBusiness : ITagBusiness
             return new EditarTagResponse(resultadoValidacao);
 
         var tag = new Tag(request.TagId, request.Descricao);
-        var result = await _tagService.Editar(tag);
+        var result = await _tagService.Editar(tag, cancellationToken);
 
         if (result is null)
             return new EditarTagResponse(new FluentValidation.Results.ValidationResult
@@ -76,9 +76,9 @@ public class TagBusiness : ITagBusiness
         return await Task.FromResult(tags.Select(x => new TagResponse(x)).ToList());
     }
 
-    public async Task<BaseResponse> ObterPorId(long tagId)
+    public async Task<BaseResponse> ObterPorId(long tagId, CancellationToken cancellationToken)
     {
-        var result = await _tagService.ObterPorId(tagId);
+        var result = await _tagService.ObterPorId(tagId, cancellationToken);
         if (result is null)
             return new NullResponse();
 

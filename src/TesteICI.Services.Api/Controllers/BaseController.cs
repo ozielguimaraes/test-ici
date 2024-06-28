@@ -56,7 +56,7 @@ public abstract class BaseController : ControllerBase
         return BadRequest(response.GetValidationFailures());
     }
 
-    protected ObjectResult ResultWhenSearching(BaseResponse response)
+    protected ObjectResult ResultadoQuandoPesquisando(BaseResponse response)
     {
         if (response is NullResponse)
         {

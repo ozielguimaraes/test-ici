@@ -1,5 +1,3 @@
-﻿using System;
-using System.Threading.Tasks;
 using TesteICI.Domain.Interfaces;
 using TesteICI.Infra.Data.Context;
 
@@ -25,9 +23,9 @@ namespace TesteICI.Infra.Data.UoW
             _context.SaveChanges();
         }
 
-        public Task<int> CommitAsync()
+        public Task<int> CommitAsync(CancellationToken cancellationToken)
         {
-            return _context.SaveChangesAsync();
+            return _context.SaveChangesAsync(cancellationToken);
         }
 
         protected virtual void Dispose(bool disposing)

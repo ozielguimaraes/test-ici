@@ -15,34 +15,34 @@ public class NoticiaService : BaseService, INoticiaService
         _noticiaRepository = noticiaRepository;
     }
 
-    public async Task<Noticia> Add(Noticia noticia)
+    public async Task<Noticia> Adicionar(Noticia noticia, CancellationToken cancellationToken)
     {
         BeginTransaction();
-        noticia = _noticiaRepository.Add(noticia);
-        await CommitAsync();
+        noticia = _noticiaRepository.Adicionar(noticia);
+        await CommitAsync(cancellationToken);
         return noticia;
     }
 
-    public async Task<Noticia> Update(Noticia noticiaUpdated)
+    public async Task<Noticia> Editar(Noticia noticiaUpdated, CancellationToken cancellationToken)
     {
         BeginTransaction();
-        var noticia = await GetById(noticiaUpdated.NoticiaId);
+        var noticia = await ObterPorId(noticiaUpdated.NoticiaId, cancellationToken);
         noticia.Update(noticiaUpdated);
-        noticiaUpdated = _noticiaRepository.Update(noticia);
-        await CommitAsync();
+        noticiaUpdated = _noticiaRepository.Editar(noticia);
+        await CommitAsync(cancellationToken);
         return noticiaUpdated;
     }
 
-    public async Task Remove(long noticiaId)
+    public async Task Remover(long noticiaId, CancellationToken cancellationToken)
     {
         BeginTransaction();
-        _noticiaRepository.Remove(await GetById(noticiaId));
-        await CommitAsync();
+        _noticiaRepository.Remover(await ObterPorId(noticiaId, cancellationToken));
+        await CommitAsync(cancellationToken);
     }
 
-    public async Task<Noticia> GetById(long noticiaId)
+    public async Task<Noticia> ObterPorId(long noticiaId, CancellationToken cancellationToken)
     {
-        var noticia = await _noticiaRepository.GetById(noticiaId);
+        var noticia = await _noticiaRepository.ObterPorId(noticiaId, cancellationToken);
 
         if (noticia is null)
             throw new Exception("Notícia não encontrada.");
@@ -55,10 +55,22 @@ public class NoticiaService : BaseService, INoticiaService
         return await _noticiaRepository.HasAnyAsync(predicate, cancellationToken);
     }
 
-
     public IQueryable<Noticia> All()
     {
         return _noticiaRepository.All();
+    }
+
+    public async Task<bool> Deletar(long usuarioId, CancellationToken cancellationToken)
+    {
+        BeginTransaction();
+        var item = await ObterPorId(usuarioId, cancellationToken);
+        if (item is null)
+            return false;
+
+        _noticiaRepository.Remover(item);
+        await CommitAsync(cancellationToken);
+
+        return true;
     }
 
     public void Dispose()

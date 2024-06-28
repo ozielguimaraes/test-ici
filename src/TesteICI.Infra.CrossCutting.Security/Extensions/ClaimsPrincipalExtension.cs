@@ -1,11 +1,10 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace TesteICI.Infra.CrossCutting.Security.Extensions
 {
     public static class ClaimsPrincipalExtension
     {
-        public static string GetUserId(this ClaimsPrincipal principal)
+        public static string? GetUserId(this ClaimsPrincipal principal)
         {
             if (principal is null)
                 throw new ArgumentException(nameof(principal));
@@ -14,7 +13,7 @@ namespace TesteICI.Infra.CrossCutting.Security.Extensions
             return claim?.Value;
         }
 
-        public static string GetUserEmail(this ClaimsPrincipal principal)
+        public static string? GetUserEmail(this ClaimsPrincipal principal)
         {
             if (principal is null)
                 throw new ArgumentException(nameof(principal));

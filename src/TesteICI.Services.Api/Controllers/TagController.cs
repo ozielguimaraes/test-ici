@@ -26,13 +26,13 @@ public class TagController : BaseController
     [Route("{tagId:int}")]
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Get(int tagId)
+    public async Task<IActionResult> Get(int tagId, CancellationToken cancellationToken)
     {
         try
         {
             Logger.LogInformation($"Method: {nameof(Get)} - GET");
             Logger.LogInformation($"tagId: {tagId}");
-            return ResultWhenSearching(await _tagBusiness.ObterPorId(tagId));
+            return ResultadoQuandoPesquisando(await _tagBusiness.ObterPorId(tagId, cancellationToken));
         }
         catch (Exception ex)
         {
@@ -66,12 +66,12 @@ public class TagController : BaseController
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Adicionar([FromBody] AdicionarTagRequest request)
+    public async Task<IActionResult> Adicionar([FromBody] AdicionarTagRequest request, CancellationToken cancellationToken)
     {
         try
         {
             Logger.LogInformation($"Method: {nameof(Adicionar)} - POST");
-            return ResultadoQuandoAdicionando(await _tagBusiness.Adicionar(request));
+            return ResultadoQuandoAdicionando(await _tagBusiness.Adicionar(request, cancellationToken));
         }
         catch (Exception ex)
         {
@@ -86,12 +86,12 @@ public class TagController : BaseController
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Editar([FromBody] EditarTagRequest request)
+    public async Task<IActionResult> Editar([FromBody] EditarTagRequest request, CancellationToken cancellationToken)
     {
         try
         {
             Logger.LogInformation($"Method: {nameof(Editar)} - PUT");
-            return ResultadoQuandoEditando(await _tagBusiness.Editar(request));
+            return ResultadoQuandoEditando(await _tagBusiness.Editar(request, cancellationToken));
         }
         catch (Exception ex)
         {
@@ -103,7 +103,8 @@ public class TagController : BaseController
 
     [HttpDelete]
     [Route("{tagId:int}")]
-    [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(List<ValidationFailure>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Deletar([FromRoute] long tagId, CancellationToken cancellationToken)
@@ -115,7 +116,7 @@ public class TagController : BaseController
         }
         catch (Exception ex)
         {
-            var message = "Error to update Tag";
+            var message = "Erro para deletar Tag";
             Logger.LogError(ex, message);
             return InternalServerError(ex, message);
         }
