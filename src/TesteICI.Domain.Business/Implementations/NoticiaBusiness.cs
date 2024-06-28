@@ -45,7 +45,6 @@ namespace TesteICI.Domain.Business.Implementations
         {
             ArgumentNullException.ThrowIfNull(request);
 
-
             var resultadoValidacao = await _editarValidator.ValidateAsync(request, cancellationToken);
 
             if (!resultadoValidacao.IsValid)
@@ -76,10 +75,11 @@ namespace TesteICI.Domain.Business.Implementations
             return new NullResponse();
         }
 
-        public async Task<List<NoticiaResponse>> GetAll()
+        public async Task<IList<NoticiaResponse>> ObterTodas(CancellationToken cancellationToken)
         {
-            var result = _noticiaService.All();
-            return await Task.FromResult(result.Select(x => MapearParaResposta(x)).ToList());
+            var noticias = await _noticiaService.ObterTodas(cancellationToken);
+
+            return noticias.Select(x => MapearParaResposta(x)).ToList();
         }
 
         public async Task<BaseResponse> ObterPorId(long noticiaId, CancellationToken cancellationToken)

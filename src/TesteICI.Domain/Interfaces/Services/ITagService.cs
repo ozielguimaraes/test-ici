@@ -10,8 +10,8 @@ namespace TesteICI.Domain.Interfaces.Services
         Task<bool> Deletar(long tagId, CancellationToken cancellationToken);
         Task<Tag?> ObterPorId(long tagId, CancellationToken cancellationToken);
         Task<bool> PossuiAlgum(Expression<Func<Tag, bool>> predicate, CancellationToken cancellationToken);
-        IQueryable<Tag> All();
-        Task<IQueryable<Tag>> Filter(Expression<Func<Tag, bool>> predicate);
+        Task<IList<Tag>> ObterTodas(CancellationToken cancellationToken);
+        Task<IEnumerable<Tag>> Pesquisar(string pesquisa, CancellationToken cancellationToken);
         Task<bool> TodosExistem(List<long> list, CancellationToken token);
     }
 }

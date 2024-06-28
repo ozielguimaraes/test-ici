@@ -55,9 +55,9 @@ public class NoticiaService : BaseService, INoticiaService
         return await _noticiaRepository.HasAnyAsync(predicate, cancellationToken);
     }
 
-    public IQueryable<Noticia> All()
+    public async Task<IList<Noticia>> ObterTodas(CancellationToken cancellationToken)
     {
-        return _noticiaRepository.All();
+        return await _noticiaRepository.ObterTodos(cancellationToken);
     }
 
     public async Task<bool> Deletar(long usuarioId, CancellationToken cancellationToken)

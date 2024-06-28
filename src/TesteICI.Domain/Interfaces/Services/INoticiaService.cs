@@ -10,7 +10,7 @@ namespace TesteICI.Domain.Interfaces.Services
         Task Remover(long noticiaId, CancellationToken cancellationToken);
         Task<Noticia> ObterPorId(long noticiaId, CancellationToken cancellationToken);
         Task<bool> HasAny(Expression<Func<Noticia, bool>> predicate, CancellationToken cancellationToken);
-        IQueryable<Noticia> All();
+        Task<IList<Noticia>> ObterTodas(CancellationToken cancellationToken);
         Task<bool> Deletar(long usuarioId, CancellationToken cancellationToken);
     }
 }

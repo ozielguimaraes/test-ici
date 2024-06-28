@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.RegisterDependencyInjection(builder.Configuration);
 
-builder.Services.AddAuthenticationConfig(builder.Configuration);
+builder.Services.AddAuthenticationApiConfig(builder.Configuration);
 
 builder.Services.AddApiConfig();
 

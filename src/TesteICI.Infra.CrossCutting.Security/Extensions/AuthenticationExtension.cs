@@ -9,7 +9,32 @@ namespace TesteICI.Infra.CrossCutting.Security.Extensions;
 
 public static class AuthenticationConfig
 {
-    public static IServiceCollection AddAuthenticationConfig(this IServiceCollection services, ConfigurationManager configuration)
+    public static IServiceCollection AddAuthenticationApiConfig(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        ConfigureCommonAuthentication(services, configuration);
+
+        services.AddJwtConfiguration(configuration);
+
+        services.AddAuthorization();
+
+        services
+            .AddJwksManager()
+            .UseJwtValidation()
+            .PersistKeysToDatabaseStore<SecurityDbContext>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddAuthenticationMvcConfig(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        ConfigureCommonAuthentication(services, configuration);
+
+        services.AddAuthorization();
+
+        return services;
+    }
+
+    private static void ConfigureCommonAuthentication(IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddScoped<ISecurityService, SecurityService>();
 
@@ -23,7 +48,7 @@ public static class AuthenticationConfig
                 errorNumbersToAdd: null);
             })
         );
-        //services.AddIdentityConfiguration();
+
         services.AddDefaultIdentity<IdentityUser>(options =>
         {
             options.Password.RequireDigit = true;
@@ -37,40 +62,5 @@ public static class AuthenticationConfig
             .AddEntityFrameworkStores<SecurityDbContext>()
             .AddErrorDescriber<IdentityPortugueseMessages>()
             .AddDefaultTokenProviders();
-
-        services.AddJwtConfiguration(configuration);
-
-        // Adicionar configurações do JWT
-        //var jwtSettings = configuration.GetSection("AppJwtSettings").Get<JwtSetting>();
-        //ArgumentNullException.ThrowIfNull(jwtSettings);
-
-        //// Configurar a autenticação JWT
-        //services.AddAuthentication(options =>
-        //{
-        //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //})
-        //.AddJwtBearer(options =>
-        //{
-        //    options.TokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidateIssuer = true,
-        //        ValidateAudience = true,
-        //        ValidateLifetime = true,
-        //        ValidateIssuerSigningKey = true,
-        //        ValidIssuer = jwtSettings.Issuer,
-        //        ValidAudience = jwtSettings.Audience,
-        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
-        //    };
-        //});
-
-        services.AddAuthorization();
-
-        services
-            .AddJwksManager()
-            .UseJwtValidation()
-            .PersistKeysToDatabaseStore<SecurityDbContext>();
-
-        return services;
     }
 }

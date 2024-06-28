@@ -66,14 +66,18 @@ public class TagService : BaseService, ITagService
         return await _tagRepository.TodosExistem(ids, token);
     }
 
-    public async Task<IQueryable<Tag>> Filter(Expression<Func<Tag, bool>> predicate)
+    public async Task<IEnumerable<Tag>> Pesquisar(string pesquisa, CancellationToken cancellationToken)
     {
-        return _tagRepository.Filter(predicate);
+        var resultado = await _tagRepository.PesquisarPorDescricao(pesquisa, cancellationToken);
+
+        return resultado.OrderBy(x => x.Descricao).ToList();
     }
 
-    public IQueryable<Tag> All()
+    public async Task<IList<Tag>> ObterTodas(CancellationToken cancellationToken)
     {
-        return _tagRepository.All();
+        var tags = await _tagRepository.ObterTodos(cancellationToken);
+
+        return tags.OrderBy(x => x.Descricao).ToList();
     }
 
     public void Dispose()

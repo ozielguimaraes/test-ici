@@ -46,12 +46,12 @@ public class TagController : BaseController
     [Route("")]
     [ProducesResponseType(typeof(TagResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
         try
         {
             Logger.LogInformation($"Method: {nameof(Get)} - GET");
-            return ResultWhenSearching(await _tagBusiness.GetAllAsync());
+            return ResultWhenSearching(await _tagBusiness.ObterTodas(cancellationToken));
         }
         catch (Exception ex)
         {

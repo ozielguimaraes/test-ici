@@ -1,0 +1,12 @@
+@model TesteICI.Domain.Business.Responses.Tag.TagResponse
+
+@{
+        ViewData["Title"] = "Excluir tag";
+
+}
+<form asp-action="Excluir" asp-controller="Tag" asp-area="Administracao" method="post">
+    <h3>Tem certeza que deseja excluir a tag <b>@Model.Descricao</b>?</h3>
+
+    <a asp-action="Index" asp-controller="Tag" asp-area="Administracao" class="btn bg-gray-700 text-white">Não</a>
+    <button type="submit" class="btn btn-danger">Sim, quero excluir</button>
+</form>

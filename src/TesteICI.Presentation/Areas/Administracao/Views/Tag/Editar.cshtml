@@ -1,0 +1,27 @@
+@model TesteICI.Domain.Business.Requests.Tag.EditarTagRequest
+@{
+        ViewData["Title"] = "Editar tag";
+
+}
+<form class="user" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="TagId" />
+    <div class="form-group">
+        <label asp-for="Descricao"></label>
+        <input class="form-control form-control-user" asp-for="Descricao">
+        <span asp-validation-for="Descricao" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
+    <script>
+        $(document).ready(function() {
+            $('#Descricao').focus();
+        });
+    </script>
+}

@@ -1,0 +1,166 @@
+@model TesteICI.Domain.Business.Requests.Noticia.AdicionarNoticiaRequest
+@{
+    ViewData["Title"] = "Adicionar notícia";
+}
+@section Styles {
+    <link href="~/lib/summernote/summernote-lite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+}
+<form id="formNoticia" class="user" method="post" asp-action="Adicionar" asp-asp-controller="Noticia" asp-asp-area="Administracao">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group row">
+        <div class="col-sm-12 mb-3 mb-sm-0">
+            <div class="form-group">
+                <label asp-for="Titulo"></label>
+                <input class="form-control form-control-user" asp-for="Titulo">
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 mb-3 mb-sm-0">
+        <div class="form-group">
+            <label asp-for="Texto"></label>
+            <textarea class="form-control form-control-user editor-html" asp-for="Texto"></textarea>
+            <span asp-validation-for="Texto" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12 mb-3 mb-sm-0">
+        <div class="form-group">
+            <label asp-for="TagIds"></label>
+            <select class="form-control form-control-user select-tags" asp-for="TagIds" multiple data-url="@Url.Action("Pesquisar", "Tag", new { area = "Administracao" })"></select>
+            <span asp-validation-for="TagIds" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary">Salvar</button>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/summernote/summernote.min.js"></script>
+    <script src="~/lib/summernote/lang/summernote-pt-br.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/pt-BR.js"></script>
+    <script src="~/js/site.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Titulo').focus();
+            $('.select-tags').select2({
+                language: "pt-BR",
+                placeholder: 'Selecione as tags',
+                language: {
+                    noResults: function () {
+                        return "Nenhum registro encontrado";
+                    },
+                    searching: function (params) {
+                        return 'Buscando...';
+                    }
+                },
+                minimumInputLength: 2,
+                ajax: {
+                    url: $("#TagIds").data("url"),
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return { id: item.tagId, text: item.descricao };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+            jQuery.validator.addMethod("requiredSummernote", function () {
+                return !($("#Texto").summernote('isEmpty'));
+            }, 'Campo obrigatório');
+            jQuery.validator.addMethod("lengthSummernote", function () {
+                return $("#Texto").summernote('code').length > 200 && $("#Texto").summernote('code').length < 8000;
+            }, 'Campo deve ter entre 200 e 8000 caracteres.');
+
+            $('#formNoticia').validate({
+                rules: {
+                    Titulo: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 250
+                    },
+                    Texto: {
+                        requiredSummernote: true,
+                        lengthSummernote: true,
+                        minlength: 200,
+                        maxlength: 8000
+                    },
+                    TagIds: {
+                        required: true 
+                    }
+                },
+                messages: {
+                    Titulo: {
+                        required: "O título é obrigatório.",
+                        minlength: "O título deve ter pelo menos {0} caracteres.",
+                        maxlength: "O título não pode ter mais que {0} caracteres."
+                    },
+                    Texto: {
+                        requiredSummernote: "O conteúdo é obrigatório.",
+                        lengthSummernote: "O conteúdo deve ter entre 200 e 8000 caracteres.",
+                    },
+                    TagIds: {
+                        required: "Selecione pelo menos uma tag."
+                    }
+                },
+                submitHandler: function (form) {
+                    var url = $(form).attr('action');
+                    var token = $("input[name='__RequestVerificationToken']", form).val();
+
+                    var tagsSelecionadas = $('.select-tags').select2('data');
+
+                    var tagIds = $.map(tagsSelecionadas, function (tag) {
+                        return tag.id;
+                    });
+                    debugger;
+
+                    const model = {
+                        "Titulo": $("#Titulo").val(),
+                        "Texto": $("#Texto").summernote('code'),
+                        "TagIds": tagIds
+                    };
+
+                    if (model.Texto === '<p><br></p>') {
+                        alert('O conteúdo é obrigatório.');
+                        return false;
+                    } else if (model.Texto.length < 200) {
+                        alert('O conteúdo deve ter pelo menos 200 caracteres.');
+                        return false;
+                    }
+                    debugger;
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: JSON.stringify(model),
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'RequestVerificationToken': token
+                        },
+                        success: function (response) {
+                            alert('Notícia salva com sucesso');
+                            debugger;
+
+                            window.location.href = '/Administracao/Noticia';
+                        },
+                        error: function (response) {
+                            debugger;
+
+                            alert('Erro ao salvar notícia');
+                        }
+                    });
+
+                    return false;
+                }
+            });
+        });
+    </script>
+}

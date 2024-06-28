@@ -9,7 +9,7 @@ namespace TesteICI.Domain.Interfaces.Repositories
         void Remover(TEntity obj);
         Task<TEntity?> ObterPorId(long id, CancellationToken cancellationToken);
         Task<bool> HasAnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
-        IQueryable<TEntity> All();
+        Task<IList<TEntity>> ObterTodos(CancellationToken cancellationToken);
         IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> predicate);
         Task<int> SaveChanges(CancellationToken cancellationToken);
     }

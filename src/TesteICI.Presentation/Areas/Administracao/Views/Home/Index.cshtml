@@ -1,0 +1,33 @@
+@model IList<TesteICI.Domain.Business.Responses.Tag.TagResponse>
+
+@{
+    ViewData["Title"] = "Tags";
+}
+
+@section Styles {
+    <!-- Custom styles for this page -->
+    <link href="~/sb-admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Oziel Guimarães</h1>
+<p class="mb-4">
+    https://www.linkedin.com/in/ozielguimaraes
+</p>
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+@section Scripts {
+    <!-- Page level plugins -->
+    <script src="~/sb-admin/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/sb-admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
+}

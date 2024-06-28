@@ -46,9 +46,9 @@ namespace TesteICI.Infra.Data.Repositories
             return await DbSet.AnyAsync(predicate, cancellationToken);
         }
 
-        public virtual IQueryable<TEntity> All()
+        public virtual async Task<IList<TEntity>> ObterTodos(CancellationToken cancellationToken)
         {
-            return DbSet;
+            return await DbSet.ToListAsync(cancellationToken);
         }
 
         public virtual IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> predicate)

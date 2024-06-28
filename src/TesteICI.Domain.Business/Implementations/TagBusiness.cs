@@ -69,11 +69,10 @@ public class TagBusiness : ITagBusiness
         return new EditarTagResponse(result.TagId, request.Descricao);
     }
 
-    public async Task<IEnumerable<TagResponse>> GetAllAsync()
+    public async Task<IEnumerable<TagResponse>> ObterTodas(CancellationToken cancellationToken)
     {
-        var queryable = _tagService.All();
-        var tags = queryable.ToList();
-        return await Task.FromResult(tags.Select(x => new TagResponse(x)).ToList());
+        var tags = await _tagService.ObterTodas(cancellationToken);
+        return tags.Select(x => new TagResponse(x)).ToList();
     }
 
     public async Task<BaseResponse> ObterPorId(long tagId, CancellationToken cancellationToken)
@@ -83,5 +82,11 @@ public class TagBusiness : ITagBusiness
             return new NullResponse();
 
         return new TagResponse(result);
+    }
+
+    public async Task<IEnumerable<TagResponse>> Pesquisar(string term, CancellationToken cancellationToken)
+    {
+        var tags = await _tagService.Pesquisar(term, cancellationToken);
+        return tags.Select(x => new TagResponse(x)).ToList();
     }
 }

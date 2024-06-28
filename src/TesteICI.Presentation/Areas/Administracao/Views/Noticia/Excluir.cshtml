@@ -1,0 +1,12 @@
+@model TesteICI.Domain.Business.Responses.Noticia.NoticiaResponse
+
+@{
+    ViewData["Title"] = "Excluir notícia";
+}
+
+<form asp-action="Excluir" asp-controller="Noticia" asp-area="Administracao" method="post">
+    <h3>Tem certeza que deseja excluir a notícia <b>@Model.Titulo</b>?</h3>
+
+    <a asp-action="Index" asp-controller="Noticia" asp-area="Administracao" class="btn bg-gray-700 text-white">Não</a>
+    <button type="submit" class="btn btn-danger">Sim, quero excluir</button>
+</form>
