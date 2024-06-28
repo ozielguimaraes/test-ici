@@ -1,0 +1,23 @@
+1) Qual fluxo os dados de um formulário em uma View deve percorrer até ser armazenado na fonte de dados em um projeto DDD?
+Depende muito do tamanho e complexidade necessário para o projeto...
+Mas acredito que uma opção é a view (html, aplicativo) envia para a controller, e a controller repassa esse request para o domínio, onde deverá ser efetuado as devidas validações de domínio, posteriormente, estando tudo Ok no validador, seguirá para a camada de aplicação onde poderá por exemplo formatar uma data. Depois que a informação foi validada e tratada, então está pronta para ser enviada para a infraestrutura/repository e ser salva no banco de dados  
+
+2) Nossa aplicação necessita que um usuário esteja autenticado para poder navegar
+nas funcionalidades, em .net, como podemos desenvolver essa autenticação?
+Através de middlewares, com UseAuthentication e UseAuthorization (caso precise de algum permissionamento)
+
+Pode estar usando alguma biblioteca como Identity
+
+DDepois de configurado a autenticação é importante lembrar que nas actions/controllers que necessita da autenticação devemos usar o atributo [Authorize]
+
+
+3) Estamos enfrentando problemas de performance na pagina inicial de um portal que
+tem muitos acessos. Essa página exibe eventos separados em 6 sessões do html,
+filtrados, cada sessão, por uma regra de negócio. Trata-se de um projeto MVC, no qual
+são realizados 6 consultas via ORM para carregar a View que será processada no
+servidor e disponibilizada ao browser. O que podemos fazer para tentar mitigar esse
+problema de performance?
+Pode se estar avaliando a frequencia de atualização dessas sessões, pois o uso do signalR pode ajudar a mitigar bem.
+Por exemplo, considerando uma tela de painel de chamada, nem sempre tem novo registro para exibir, então com o signalR enviaria uma mensagem sinalizando que houve mudança na sessão X, sendo assim a atualização ocorrerá apenas naquele momento e apenas para sessão X.
+
+Outra opção é utilizar Cache de dados, Paginação, verificar indexação no banco de dados, trazer apenas informação estritamente necessária, utilizar consulta assincrona, avaliar o uso do Dapper ou ADO...
